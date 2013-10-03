@@ -29,6 +29,11 @@ public:
   void handleCollision(Thing * thing, int direction);
 };
 
+class Bullet : public Weapon {
+public:
+  Bullet(Point2f pos, float depth);
+};
+
 class Bowling : public Weapon {
 public:
   Bowling(Point2f pos, float depth);
@@ -40,6 +45,7 @@ class Gun : public Weapon {
 public:
   Gun(Point2f pos, float depth);
   void handleCollision(Thing * thing, int direction);
+  void render(Point2f pos, Vector2f size) const;
   int bullets;
 };
 

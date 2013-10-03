@@ -15,8 +15,8 @@ void Weapon::handleCollision(Thing * thing, int direction) {
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING) {
-      theThing->damage(getPos(), damagePoints);
-      this->damage(getPos(), damagePoints);
+      theThing->damage(getPos(), damagePoints*velocity.magnitude());
+      this->damage(getPos(), damagePoints*velocity.magnitude());
     }
   }
 }
@@ -42,6 +42,11 @@ Melee::Melee(Point2f pos, float depth, int damage) : Weapon(pos, 10, 10, depth, 
 void Melee::handleCollision(Thing * thing, int direction) {
   Weapon::handleCollision(thing, direction);
   deletable = true;
+}
+
+Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 10, depth, 100, 100) {
+  //name = BULLET;
+  texture = "bullet";
 }
 
 
@@ -92,12 +97,35 @@ void Bowling::render(Point2f pos, Vector2f size) const {
 }
 
 
-Gun::Gun(Point2f pos, float depth) : Weapon(pos, 10, 10, depth, 100, 500) {
+Gun::Gun(Point2f pos, float depth) : Weapon(pos, 20, 20, depth, 20, 500) {
   name = GUN;
+  texture = "gun";
   bullets = 6;
 }
 
 void Gun::handleCollision(Thing * thing, int direction) {
+  if (direction & Constants::DOWN) {
+    grounded = true;
+    if (thing->type & STATIC) {
+      setPos(getPos().x, thing->getTopAt(getPos().x));
+    }
+  } else {
+    if (direction & Constants::LEFT) {
+      //setPos(getPos().x-getVelocity().x, getPos().y);
+      if (thing->type & STATIC) {
+        thing->setPos(getLeft()-thing->getSize().x/2, thing->getPos().y);
+      }
+    } else if (direction & Constants::RIGHT) {
+      //setPos(getPos().x-getVelocity().x, getPos().y);
+      if (thing->type & STATIC) {
+        thing->setPos(getRight()+thing->getSize().x/2, thing->getPos().y);
+      }
+    }
+  }
   Weapon::handleCollision(thing, direction);
-  deletable = true;
+}
+
+void Gun::render(Point2f pos, Vector2f size) const {
+  float rotation = -x/50;
+  Thing::render(String(texture), pos, size, rotation);
 }

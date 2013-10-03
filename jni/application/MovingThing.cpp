@@ -79,6 +79,13 @@ void MovingThing::damage(Point2f pos, int points) {
 void MovingThing::die() {
   staticed = true;
 }
+
+int MovingThing::getFace() {
+  if (flipped) {
+    return -1;
+  }
+  return 1;
+}
   
 void MovingThing::move() {
   this->x += velocity.x;

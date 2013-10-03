@@ -15,7 +15,6 @@ class Me : public MovingThing {
     Me(float x=0, float y=0, float width=0, float height=0, float depth=1);
   
     void attack(ThingsList * renderList);
-    void smack(int frame);
     Point2f getAttackPoint();
     Point2f getThrowPoint();
     void action(MovingThing* thing);
@@ -25,6 +24,10 @@ class Me : public MovingThing {
   
     void damage(Point2f pos, int points);
     void move();
+  
+    // Attacks
+    void smack(int frame);
+    void shoot(int frame);
 
     int walkingAccel;
     vector<string> frames;

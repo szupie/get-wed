@@ -31,6 +31,8 @@ class MovingThing : public Thing {
   
     virtual void die();
   
+    int getFace();
+  
     virtual void move();
   
     void render(Point2f pos, Vector2f size) const;

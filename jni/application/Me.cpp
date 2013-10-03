@@ -27,24 +27,54 @@ Me::Me(float x, float y, float width, float height, float depth) : MovingThing(x
 void Me::attack(ThingsList * renderList) {
   this->renderList = renderList;
   if (currentAction == NULL) {
-    currentAction = &Me::smack;
     actionCounter = 0;
-    GameCamera::targetZoom = 0.5;
+    if (holding == NULL) {
+      currentAction = &Me::smack;
+      GameCamera::targetZoom = 0.5;
+    } else {
+      // What's the attack?
+      Weapon * weapon = (Weapon*)holding;
+      if (weapon->name == GUN) {
+        currentAction = &Me::shoot;
+      }
+    }
   }
 }
 
 void Me::smack(int frame) {
-  int speed = 7;
-  if (frame == 3*speed) {
+  int totalFrames = 28;
+  int sprites = 4;
+  if (frame == 3*totalFrames/sprites) {
     Melee * smackPoint = new Melee(getAttackPoint(), getDepth(), 20);
+    // damage = speed*dp, so x1
+    smackPoint->accelerate(Vector2f(getFace(),0));
     renderList->append(smackPoint);
-  } else if (frame/speed > 3) {
+  } else if (frame >= totalFrames) {
     currentAction = NULL;
     GameCamera::setZoomOutView();
     return;
   }
   char num[2];
-  sprintf(num, "mewalk%d", (frame/speed)+6);
+  sprintf(num, "mewalk%d", (frame*sprites/totalFrames)+6);
+  texture = num;
+}
+
+void Me::shoot(int frame) {
+  int totalFrames = 7;
+  int sprites = 1;
+  if (frame == 1*totalFrames/sprites) {
+    if (((Gun*)holding)->bullets > 0) {
+      Bullet * bullet = new Bullet(getAttackPoint(), getDepth());
+      bullet->accelerate(Vector2f(getFace()*50, 0));
+      renderList->append(bullet);
+      ((Gun*)holding)->bullets--;
+    }
+  } else if (frame >= totalFrames) {
+    currentAction = NULL;
+    return;
+  }
+  char num[2];
+  sprintf(num, "mewalk%d", (frame*sprites/totalFrames)+3);
   texture = num;
 }
 

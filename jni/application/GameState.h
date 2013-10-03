@@ -7,7 +7,6 @@
 #include "Me.h"
 #include "Person.h"
 #include "Static.h"
-#include "Weapon.h"
 
 using namespace std;
 using namespace Zeni;

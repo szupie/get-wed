@@ -8,6 +8,7 @@ GameState::GameState() {
   Static * ground = new Static(0, 1100, 20480, 100, 1);
   Static * ground2 = new Static(0, 1100, 20480, 100, 0.8);
   Bowling * bowling = new Bowling(Point2f(-200, 1000), 1);
+  Gun * gun = new Gun(Point2f(100, 500), 1);
   Static * newThing = new Static(-100,1000,100,50,1);
   Static * triangle = new Static(350,1000,200,100,1);
   Static * triangle2 = new Static(550,1000,200,100,1);
@@ -21,6 +22,7 @@ GameState::GameState() {
   thingsDebug[ground] = "ground";
   thingsDebug[ground2] = "ground2";
   thingsDebug[bowling] = "bowling";
+  thingsDebug[gun] = "Gun";
   thingsDebug[newThing] = "newThing";
   thingsDebug[newThing2] = "newThing2";
   thingsDebug[triangle] = "triangle1";
@@ -30,19 +32,17 @@ GameState::GameState() {
   
   cout<<"Player is "<<player<<endl;
   cout<<"dude is "<<dude<<endl;
+  cout<<"gun is "<<gun<<endl;
   cout<<"bg is "<<bg<<endl;
   cout<<"ground is "<<ground<<endl;
   cout<<"bowling is "<<bowling<<endl;
-  cout<<"triangle1 is "<<triangle<<endl;
-  cout<<"triangle2 is "<<triangle2<<endl;
-  cout<<"newThing is "<<newThing<<endl;
-  cout<<"newThing2 is "<<newThing2<<endl;
   
   renderList.append(player);
   renderList.append(bg);
   renderList.append(ground);
   renderList.append(ground2);
   renderList.append(bowling);
+  player->give(gun);
   renderList.append(triangle);
   renderList.append(triangle2);
   renderList.append(newThing);
@@ -116,9 +116,11 @@ void GameState::on_key(const SDL_KeyboardEvent &event) {
       if (!event.repeat && isActionReleased && event.type == SDL_KEYDOWN) {
         onActionDown();
         isActionReleased = false;
+        GameCamera::targetZoom = 0.7;
       }
       if (event.type == SDL_KEYUP) {
         isActionReleased = true;
+        GameCamera::setZoomOutView();
       }
       break;
     case SDLK_LSHIFT:
@@ -257,7 +259,6 @@ void GameState::perform_logic() {
       peep->walkTo(interval, player->getPos().x);
     }
   }
-  cout<<"I'm ";if (player->grounded) cout<<"GROUNDED"<<endl; else cout<<"NOT"<<endl;
   
   applyPhysics();
 }

@@ -102,6 +102,14 @@ The following things are unsupported:
     <token>mewalk9</token>
     <token>mewalk10</token>
   </meWalk>
+  <gun>
+    <filepath>textures/gun.png</filepath>
+    <tile>0</tile>
+  </gun>
+  <bullet>
+    <filepath>textures/bullet.png</filepath>
+    <tile>0</tile>
+  </bullet>
   <bowling>
     <filepath>textures/bowling.png</filepath>
     <tile>0</tile>
