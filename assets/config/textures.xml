@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<!-- Images to load into the Textures Database in zenilib
+     Sprites to build in the Textures Database in zenilib
+
+For each Texture entry in Textures:
+
+  1. 'token' should match the name you want to use in C++
+  2. 'is_sprite' should be 0 (or absent [deprecated])
+  3. 'filepath' should be the path from within 'zenilib/'
+  4. 'tile' should be 0 for best quality if tiling is unnecessary
+     'tile' should be 1 to enable tiling (for *ALL* textures for .3ds 'Model's)
+       
+     If 'tile' is 1 and tiling is not desired, floating point
+     error can make things look worse at the edges of tiles.
+
+For each Sprite entry in Textures:
+
+  1. 'sprite_token' should match the name you want to use in C++
+  2. 'is_sprite' should be 1
+  3. 'token's should be the tokens of existing Textures
+     'file's should be standard Texture entries (see above)
+       the 'token' for the frame will be 'sprite_token/frame_number'
+     
+     All 'token's must have been defined earlier in the file.
+     'token's defined later in the file will be ignored.
+
+The following formats are supported:
+
+  1. PNG is supported with 8 bits per channel
+     (Grayscale/RGBA, with or without Alpha)
+
+The following things are unsupported:
+
+  1. BMP, JPEG, and GIF images
+  2. Indexed color
+  3. Indexed transparency
+  4. Anything other than 8 bits per channel
+-->
+<Textures>
+  <me>
+    <filepath>textures/me.png</filepath>
+    <tile>0</tile>
+  </me>
+  <medead>
+    <filepath>textures/medead.png</filepath>
+    <tile>0</tile>
+  </medead>
+  <merest0>
+    <filepath>textures/me/00.png</filepath>
+    <tile>0</tile>
+  </merest0>
+  <mewalk1>
+    <filepath>textures/me/01.png</filepath>
+    <tile>0</tile>
+  </mewalk1>
+  <mewalk2>
+    <filepath>textures/me/02.png</filepath>
+    <tile>0</tile>
+  </mewalk2>
+  <mewalk3>
+    <filepath>textures/me/03.png</filepath>
+    <tile>0</tile>
+  </mewalk3>
+  <mewalk4>
+    <filepath>textures/me/04.png</filepath>
+    <tile>0</tile>
+  </mewalk4>
+  <mewalk5>
+    <filepath>textures/me/05.png</filepath>
+    <tile>0</tile>
+  </mewalk5>
+  <mewalk6>
+    <filepath>textures/me/06.png</filepath>
+    <tile>0</tile>
+  </mewalk6>
+  <mewalk7>
+    <filepath>textures/me/07.png</filepath>
+    <tile>0</tile>
+  </mewalk7>
+  <mewalk8>
+    <filepath>textures/me/08.png</filepath>
+    <tile>0</tile>
+  </mewalk8>
+  <mewalk9>
+    <filepath>textures/me/09.png</filepath>
+    <tile>0</tile>
+  </mewalk9>
+  <mewalk10>
+    <filepath>textures/me/10.png</filepath>
+    <tile>0</tile>
+  </mewalk10>
+  <meWalk>
+    <is_sprite>1</is_sprite>
+    <token>mewalk1</token>
+    <token>mewalk2</token>
+    <token>mewalk3</token>
+    <token>mewalk4</token>
+    <token>mewalk5</token>
+    <token>mewalk6</token>
+    <token>mewalk7</token>
+    <token>mewalk8</token>
+    <token>mewalk9</token>
+    <token>mewalk10</token>
+  </meWalk>
+  <bowling>
+    <filepath>textures/bowling.png</filepath>
+    <tile>0</tile>
+  </bowling>
+  <triangle>
+    <filepath>textures/triangletest.png</filepath>
+    <tile>0</tile>
+  </triangle>
+  <triangleflip>
+    <filepath>textures/triangletestflip.png</filepath>
+    <tile>0</tile>
+  </triangleflip>
+  <default>
+    <filepath>textures/gridtest.png</filepath>
+    <tile>0</tile>
+  </default>
+</Textures>
