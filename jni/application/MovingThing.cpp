@@ -56,10 +56,20 @@ void MovingThing::handleCollision(Thing * thing, int direction) {
   } else {
     if (direction & Constants::LEFT) {
       //setPos(getPos().x-getVelocity().x, getPos().y);
-      setPos(thing->getRight()+getSize().x/2, getPos().y);
+      //setPos(thing->getRight()+getSize().x/2, getPos().y);
+      if (thing->type & STATIC) {
+        setPos(thing->getRight()+getSize().x/2, getPos().y);
+      } else {
+        thing->setPos(getLeft()-thing->getSize().x/2, thing->getPos().y);
+      }
     } else if (direction & Constants::RIGHT) {
       //setPos(getPos().x-getVelocity().x, getPos().y);
-      setPos(thing->getLeft()-getSize().x/2, getPos().y);
+      //setPos(thing->getLeft()-getSize().x/2, getPos().y);
+      if (thing->type & STATIC) {
+        setPos(thing->getLeft()-getSize().x/2, getPos().y);
+      } else {
+        thing->setPos(getRight()+thing->getSize().x/2, thing->getPos().y);
+      }
     }
     /*if (direction & (Constants::LEFT | Constants::RIGHT) && thing->type & MOVINGTHING) {
       Vector2f vel = ((MovingThing*)thing)->getVelocity();

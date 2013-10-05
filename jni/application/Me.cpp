@@ -11,20 +11,9 @@ Me::Me(float x, float y, float width, float height, float depth) : MovingThing(x
   throwPower = 2;
   currentAction = NULL;
   currentFrame = 0;
-  frames.push_back("mewalk1");
-  frames.push_back("mewalk2");
-  frames.push_back("mewalk3");
-  frames.push_back("mewalk4");
-  frames.push_back("mewalk5");
-  frames.push_back("mewalk6");
-  frames.push_back("mewalk7");
-  frames.push_back("mewalk8");
-  frames.push_back("mewalk9");
-  frames.push_back("mewalk10");
-  texture = frames[int(currentFrame)];
 }
 
-void Me::attack(ThingsList * renderList) {
+void Me::attack() {
   this->renderList = renderList;
   if (currentAction == NULL) {
     actionCounter = 0;
@@ -54,7 +43,7 @@ void Me::smack(int frame) {
     GameCamera::setZoomOutView();
     return;
   }
-  char num[2];
+  char num[7];
   sprintf(num, "mewalk%d", (frame*sprites/totalFrames)+6);
   texture = num;
 }
@@ -73,7 +62,7 @@ void Me::shoot(int frame) {
     currentAction = NULL;
     return;
   }
-  char num[2];
+  char num[7];
   sprintf(num, "mewalk%d", (frame*sprites/totalFrames)+3);
   texture = num;
 }
@@ -89,7 +78,7 @@ Point2f Me::getThrowPoint() {
   if (flipped) horiz = getLeft()-holding->getSize().x/2-5;
   float vert = y-height*.75;
   if (holding->type & WEAPON && ((Weapon*)holding)->name == BOWLING) {
-    vert = y-5; // 5px offset for teh lulz?
+    vert = y-16; // matches animation
   }
   return Point2f(horiz, vert); // 5px offset
 }
@@ -106,13 +95,46 @@ void Me::action(MovingThing * thing) {
   cout<<"holding "<<holding<<endl;
 }
 
-void Me::chargeThrow(ThingsList * renderList) {
-  if (holding != NULL) {
-    this->renderList = renderList;
+void Me::doThrow() {
+  if (currentAction == NULL && holding != NULL) {
+    actionCounter = 0;
+    GameCamera::targetZoom = 0.4;
+    currentAction = &Me::chargeThrow;
+  }
+}
+
+void Me::chargeThrow(int frame) {
+  if (holding != NULL && ((Weapon*)holding)->name == BOWLING) {
+    int framesPerSprite = 5;
+    if (frame == 4*framesPerSprite) {
+      frame = 3*framesPerSprite;
+    } else if (frame >= 7*framesPerSprite) {
+      throwIt();
+      return;
+    }
+    char num[13];
+    cout<<frame<<" and "<<int(frame/framesPerSprite)<<endl;
+    if (sprintf(num, "bowlingthrow%d", int(frame/framesPerSprite))) {
+      cout<<"SUCCESS!"<<num<<endl;
+      texture = num;
+    } else {
+      cout<<"BOO "<<int(frame/framesPerSprite)<<endl;
+    }
     throwPower *= 1.02;
     cout<<"power at "<<throwPower<<endl;
-    GameCamera::targetZoom = 0.4;
     if (throwPower >= 20) {
+      actionCounter = 4*5+1;
+    }
+  } else if (holding == NULL) {
+    currentAction = NULL;
+  }
+}
+
+void Me::releaseCharge() {
+  if (holding != NULL) {
+    if (((Weapon*)holding)->name == BOWLING) {
+      if (actionCounter <= 4*5) actionCounter = 4*5+1;
+    } else {
       throwIt();
     }
   }
@@ -127,6 +149,7 @@ void Me::throwIt() {
     cout<<"its speed is "<<holding->getVelocity().x<<endl;
     holding->held = false;
     renderList->append(holding);
+    currentAction = NULL;
     holding = NULL;
     throwPower = 1;
     maxSpeed = MAXSPEED;
@@ -142,15 +165,18 @@ void Me::damage(Point2f pos, int points) {
 
 void Me::move() {
   MovingThing::move();
-  
-  currentFrame = currentFrame+(velocity.x/40.0);
-  if (currentFrame > 10) currentFrame -= 10;
-  else if (currentFrame < 0) currentFrame += 10;
+  char num[7];
   
   if (velocity.magnitude() < 1) {
-    texture = "merest0";
+    currentFrame += 1;
+    sprintf(num, "merest%d", int(currentFrame/50)%4);
+    texture = num;
   } else {
-    texture = frames[int(currentFrame)%10];
+    currentFrame += velocity.x/40.0;
+    if (currentFrame > 10) currentFrame -= 10;
+    else if (currentFrame < 0) currentFrame += 10;
+    sprintf(num, "mewalk%d", int(currentFrame)%10);
+    texture = num;
   }
   
   if (currentAction != NULL) {

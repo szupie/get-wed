@@ -31,6 +31,8 @@ class Thing {
     float getRight();
     float getBottom();
     float getLeft();
+  
+    Vector2f renderSize;
     
     bool deletable;
     bool held;

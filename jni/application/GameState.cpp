@@ -1,22 +1,30 @@
 #include "GameState.h"
 
 GameState::GameState() {
-  player = new Me(100, 1000, 100, 100, 1);
-  Person * dude = new Person(700, 1000, 100, 100, 1);
+  player = new Me(100, 1000, 32, 94, 1);
+  Person * dude = new Person(700, 1000, 32, 94, 1);
+  player->renderSize = Vector2f(100, 100);
+  dude->renderSize = Vector2f(100, 100);
   
-  Static * bg = new Static(512, 1024, 1024, 1024, 0.5);
-  Static * ground = new Static(0, 1100, 20480, 100, 1);
-  Static * ground2 = new Static(0, 1100, 20480, 100, 0.8);
+  Static * bg = new Static(100, 1024, 20480, 1024, 0.5);
+  Static * ground = new Static(-500, 1100, 20480, 100, 1);
+  Static * ground2 = new Static(-450, 1100, 20480, 100, 0.8);
   Bowling * bowling = new Bowling(Point2f(-200, 1000), 1);
-  Gun * gun = new Gun(Point2f(100, 500), 1);
+  Gun * gun = new Gun(Point2f(-300, 1000), 1);
   Static * newThing = new Static(-100,1000,100,50,1);
   Static * triangle = new Static(350,1000,200,100,1);
   Static * triangle2 = new Static(550,1000,200,100,1);
   Static * newThing2 = new Static(0,1000,100,100,1.2);
+  bg->setTexture("blue");
+  ground->setTexture("ground");
+  ground2->setTexture("ground");
+  newThing->setTexture("green");
+  newThing2->setTexture("green");
   triangle->setTexture("triangle");
   triangle2->setTexture("triangleflip");
   triangle->setSlope(0.5, 100);
   triangle2->setSlope(-0.5, -100);
+  player->renderList = &renderList;
   
   thingsDebug[player] = "Player";
   thingsDebug[ground] = "ground";
@@ -42,7 +50,7 @@ GameState::GameState() {
   renderList.append(ground);
   renderList.append(ground2);
   renderList.append(bowling);
-  player->give(gun);
+  renderList.append(gun);
   renderList.append(triangle);
   renderList.append(triangle2);
   renderList.append(newThing);
@@ -152,9 +160,14 @@ void GameState::on_key(const SDL_KeyboardEvent &event) {
 }
 
 int GameState::checkCollision(MovingThing * obj1, Thing * obj2) {
-  Vector2f moveDirection = obj1->getVelocity();
-  if (obj2->type & MOVINGTHING) moveDirection -= ((MovingThing*)obj2)->getVelocity();
   int hitDir = 0;
+  Vector2f moveDirection = obj1->getVelocity();
+  if (obj2->type & MOVINGTHING) {
+    moveDirection -= ((MovingThing*)obj2)->getVelocity();
+  }
+  if (obj1->type & WEAPON && obj2->type & MOVINGTHING && obj1->getVelocity().magnitude()<1) {
+    return 0;
+  }
   if (moveDirection.y >= 0 && // Going down or staying
       // 5px buffer to assist stair declimbing
       obj1->getBottom()+5 >= obj2->getTopAt(obj1->getPos().x) &&
@@ -248,7 +261,7 @@ void GameState::perform_logic() {
     }
   }
   if (isShiftDown) {
-    player->chargeThrow(&renderList);
+    player->doThrow();
   }
   
   // Apply AI
@@ -272,7 +285,7 @@ void GameState::onUpDown() {
 }
 
 void GameState::onShiftRelease() {
-  player->throwIt();
+  player->releaseCharge();
 }
 
 void GameState::onActionDown() {
@@ -291,7 +304,7 @@ void GameState::onActionDown() {
 }
 
 void GameState::onSpaceDown() {
-  player->attack(&renderList);
+  player->attack();
 }
   
 void GameState::render() {
@@ -303,5 +316,5 @@ void GameState::render() {
     GameCamera::renderThing(renderList[i]);
   }
   
-  //get_Fonts()["title"].render_text("SPF: " + ulltoa(get_Game().get_fps()), GameCamera::get46().first, Color());
+  get_Fonts()["title"].render_text("SPF: " + ulltoa(get_Game().get_fps()), GameCamera::get46().first, Color());
 }

@@ -50,7 +50,7 @@ Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 10, depth, 100, 100) 
 }
 
 
-Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 50, 50, depth, 20, 500) {
+Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 35, 35, depth, 20, 500) {
   name = BOWLING;
   texture = "bowling";
   friction = 0.95;
@@ -58,30 +58,7 @@ Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 50, 50, depth, 20, 500)
 }
 
 void Bowling::handleCollision(Thing * thing, int direction) {
-  if (direction & Constants::DOWN) {
-    grounded = true;
-    setPos(getPos().x, thing->getTopAt(getPos().x));
-  } else {
-    if (direction & Constants::LEFT) {
-      //setPos(getPos().x-getVelocity().x, getPos().y);
-      if (thing->type & STATIC) {
-        setPos(thing->getRight()+getSize().x/2, getPos().y);
-      } else {
-        thing->setPos(getLeft()-thing->getSize().x/2, thing->getPos().y);
-      }
-    } else if (direction & Constants::RIGHT) {
-      //setPos(getPos().x-getVelocity().x, getPos().y);
-      if (thing->type & STATIC) {
-        setPos(thing->getLeft()-getSize().x/2, getPos().y);
-      } else {
-        thing->setPos(getRight()+thing->getSize().x/2, thing->getPos().y);
-      }
-    }
-    /*if (direction & (Constants::LEFT | Constants::RIGHT) && thing->type & MOVINGTHING) {
-     Vector2f vel = ((MovingThing*)thing)->getVelocity();
-     thing->setPos(thing->getPos().x-vel.x, thing->getPos().y-vel.y);
-     }*/
-  }
+  MovingThing::handleCollision(thing, direction);
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING && velocity.magnitude()>1) {

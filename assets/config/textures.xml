@@ -46,62 +46,89 @@ The following things are unsupported:
     <tile>0</tile>
   </medead>
   <merest0>
-    <filepath>textures/me/00.png</filepath>
+    <filepath>textures/me/merest0.png</filepath>
     <tile>0</tile>
   </merest0>
+  <merest1>
+    <filepath>textures/me/merest1.png</filepath>
+    <tile>0</tile>
+  </merest1>
+  <merest2>
+    <filepath>textures/me/merest2.png</filepath>
+    <tile>0</tile>
+  </merest2>
+  <merest3>
+    <filepath>textures/me/merest3.png</filepath>
+    <tile>0</tile>
+  </merest3>
+  <mewalk0>
+    <filepath>textures/me/mewalk0.png</filepath>
+    <tile>0</tile>
+  </mewalk0>
   <mewalk1>
-    <filepath>textures/me/01.png</filepath>
+    <filepath>textures/me/mewalk1.png</filepath>
     <tile>0</tile>
   </mewalk1>
   <mewalk2>
-    <filepath>textures/me/02.png</filepath>
+    <filepath>textures/me/mewalk2.png</filepath>
     <tile>0</tile>
   </mewalk2>
   <mewalk3>
-    <filepath>textures/me/03.png</filepath>
+    <filepath>textures/me/mewalk3.png</filepath>
     <tile>0</tile>
   </mewalk3>
   <mewalk4>
-    <filepath>textures/me/04.png</filepath>
+    <filepath>textures/me/mewalk4.png</filepath>
     <tile>0</tile>
   </mewalk4>
   <mewalk5>
-    <filepath>textures/me/05.png</filepath>
+    <filepath>textures/me/mewalk5.png</filepath>
     <tile>0</tile>
   </mewalk5>
   <mewalk6>
-    <filepath>textures/me/06.png</filepath>
+    <filepath>textures/me/mewalk6.png</filepath>
     <tile>0</tile>
   </mewalk6>
   <mewalk7>
-    <filepath>textures/me/07.png</filepath>
+    <filepath>textures/me/mewalk7.png</filepath>
     <tile>0</tile>
   </mewalk7>
   <mewalk8>
-    <filepath>textures/me/08.png</filepath>
+    <filepath>textures/me/mewalk8.png</filepath>
     <tile>0</tile>
   </mewalk8>
   <mewalk9>
-    <filepath>textures/me/09.png</filepath>
+    <filepath>textures/me/mewalk9.png</filepath>
     <tile>0</tile>
   </mewalk9>
-  <mewalk10>
-    <filepath>textures/me/10.png</filepath>
+  <bowlingthrow0>
+    <filepath>textures/me/bowlingthrow0.png</filepath>
     <tile>0</tile>
-  </mewalk10>
-  <meWalk>
-    <is_sprite>1</is_sprite>
-    <token>mewalk1</token>
-    <token>mewalk2</token>
-    <token>mewalk3</token>
-    <token>mewalk4</token>
-    <token>mewalk5</token>
-    <token>mewalk6</token>
-    <token>mewalk7</token>
-    <token>mewalk8</token>
-    <token>mewalk9</token>
-    <token>mewalk10</token>
-  </meWalk>
+  </bowlingthrow0>
+  <bowlingthrow1>
+    <filepath>textures/me/bowlingthrow1.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow1>
+  <bowlingthrow2>
+    <filepath>textures/me/bowlingthrow2.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow2>
+  <bowlingthrow3>
+    <filepath>textures/me/bowlingthrow3.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow3>
+  <bowlingthrow4>
+    <filepath>textures/me/bowlingthrow4.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow4>
+  <bowlingthrow5>
+    <filepath>textures/me/bowlingthrow5.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow5>
+  <bowlingthrow6>
+    <filepath>textures/me/bowlingthrow6.png</filepath>
+    <tile>0</tile>
+  </bowlingthrow6>
   <gun>
     <filepath>textures/gun.png</filepath>
     <tile>0</tile>
@@ -122,6 +149,18 @@ The following things are unsupported:
     <filepath>textures/triangletestflip.png</filepath>
     <tile>0</tile>
   </triangleflip>
+  <ground>
+    <filepath>textures/ground.png</filepath>
+    <tile>1</tile>
+  </ground>
+  <green>
+    <filepath>textures/green.png</filepath>
+    <tile>1</tile>
+  </green>
+  <blue>
+    <filepath>textures/blue.png</filepath>
+    <tile>1</tile>
+  </blue>
   <default>
     <filepath>textures/gridtest.png</filepath>
     <tile>0</tile>

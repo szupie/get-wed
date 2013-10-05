@@ -9,6 +9,7 @@ Thing::Thing(float x, float y, float width, float height, float depth) {
   flipped = false;
   setPos(x, y);
   setSize(width, height);
+  renderSize = Vector2f(width, height);
   this->depth = depth;
   noRender = false;
   deletable = false;
@@ -64,8 +65,8 @@ float Thing::getLeft() {
 void Thing::render(const String &texture, Point2f pos, Vector2f size, float rotation) const {
   if (!noRender) {
     render_image(texture, 
-                 Point2f(pos.x-(size.x/2), pos.y-size.y), 
-                 Point2f(pos.x+(size.x/2), pos.y), 
+                 Point2f(pos.x-(renderSize.x/2), pos.y-renderSize.y), 
+                 Point2f(pos.x+(renderSize.x/2), pos.y), 
                  rotation,
                  1,
                  Point2f(pos.x, pos.y-size.y/2),
@@ -75,11 +76,5 @@ void Thing::render(const String &texture, Point2f pos, Vector2f size, float rota
 }
 
 void Thing::render(const String &texture, Point2f pos, Vector2f size) const {
-  if (!noRender) {
-    render_image(texture, 
-                 Point2f(pos.x-(size.x/2), pos.y-size.y), 
-                 Point2f(pos.x+(size.x/2), pos.y), 
-                 flipped, 
-                 Color());
-  }
+  render(texture, pos, size, 0);
 }
