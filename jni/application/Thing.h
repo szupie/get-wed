@@ -10,7 +10,6 @@ enum ThingType { THING=1, STATIC=1<<1, MOVINGTHING=1<<2, PERSON=1<<3, ME=1<<4, W
 
 class Thing {
   public:
-    Thing();
     Thing(float x=0, float y=0, float width=0, float height=0, float depth=1);
   
     virtual ~Thing();
@@ -21,6 +20,7 @@ class Thing {
     void setSize(float width, float height);
     
     void setSlope(float slope, float intercept);
+    Vector2f getNormal();
     
     Point2f getPos() const;
     void setPos(float x, float y);

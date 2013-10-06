@@ -7,7 +7,7 @@
 using namespace std;
 using namespace Zeni;
 
-enum weaponName { MELEE, BOWLING, SWORD, GUN, MONEY, BEER };
+enum weaponName { NOWEAPON, MELEE, BOWLING, SWORD, GUN, MONEY, BEER };
 
 class Weapon : public MovingThing {
   public:

@@ -101,6 +101,70 @@ The following things are unsupported:
     <filepath>textures/me/mewalk9.png</filepath>
     <tile>0</tile>
   </mewalk9>
+  <gunrest0>
+    <filepath>textures/me/gunrest0.png</filepath>
+    <tile>0</tile>
+  </gunrest0>
+  <gunwalk0>
+    <filepath>textures/me/gunwalk0.png</filepath>
+    <tile>0</tile>
+  </gunwalk0>
+  <gunwalk1>
+    <filepath>textures/me/gunwalk1.png</filepath>
+    <tile>0</tile>
+  </gunwalk1>
+  <gunwalk2>
+    <filepath>textures/me/gunwalk2.png</filepath>
+    <tile>0</tile>
+  </gunwalk2>
+  <gunwalk3>
+    <filepath>textures/me/gunwalk1.png</filepath>
+    <tile>0</tile>
+  </gunwalk3>
+  <gunfire0>
+    <filepath>textures/me/gunfire0.png</filepath>
+    <tile>0</tile>
+  </gunfire0>
+  <gunfire1>
+    <filepath>textures/me/gunfire1.png</filepath>
+    <tile>0</tile>
+  </gunfire1>
+  <gunfire2>
+    <filepath>textures/me/gunfire1.png</filepath>
+    <tile>0</tile>
+  </gunfire2>
+  <gunfire3>
+    <filepath>textures/me/gunfire2.png</filepath>
+    <tile>0</tile>
+  </gunfire3>
+  <gunfire4>
+    <filepath>textures/me/gunfire2.png</filepath>
+    <tile>0</tile>
+  </gunfire4>
+  <gunfire5>
+    <filepath>textures/me/gunfire2.png</filepath>
+    <tile>0</tile>
+  </gunfire5>
+  <bowlingrest0>
+    <filepath>textures/me/bowlingrest0.png</filepath>
+    <tile>0</tile>
+  </bowlingrest0>
+  <bowlingwalk0>
+    <filepath>textures/me/bowlingwalk0.png</filepath>
+    <tile>0</tile>
+  </bowlingwalk0>
+  <bowlingwalk1>
+    <filepath>textures/me/bowlingwalk1.png</filepath>
+    <tile>0</tile>
+  </bowlingwalk1>
+  <bowlingwalk2>
+    <filepath>textures/me/bowlingwalk2.png</filepath>
+    <tile>0</tile>
+  </bowlingwalk2>
+  <bowlingwalk3>
+    <filepath>textures/me/bowlingwalk3.png</filepath>
+    <tile>0</tile>
+  </bowlingwalk3>
   <bowlingthrow0>
     <filepath>textures/me/bowlingthrow0.png</filepath>
     <tile>0</tile>

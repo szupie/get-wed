@@ -1,5 +1,7 @@
 #include "GameState.h"
 
+float GRAVITY = 0.3f;
+
 GameState::GameState() {
   player = new Me(100, 1000, 32, 94, 1);
   Person * dude = new Person(700, 1000, 32, 94, 1);
@@ -8,7 +10,7 @@ GameState::GameState() {
   
   Static * bg = new Static(100, 1024, 20480, 1024, 0.5);
   Static * ground = new Static(-500, 1100, 20480, 100, 1);
-  Static * ground2 = new Static(-450, 1100, 20480, 100, 0.8);
+  Static * ground2 = new Static(-550, 1100, 20480, 100, 0.8);
   Bowling * bowling = new Bowling(Point2f(-200, 1000), 1);
   Gun * gun = new Gun(Point2f(-300, 1000), 1);
   Static * newThing = new Static(-100,1000,100,50,1);
@@ -44,6 +46,10 @@ GameState::GameState() {
   cout<<"bg is "<<bg<<endl;
   cout<<"ground is "<<ground<<endl;
   cout<<"bowling is "<<bowling<<endl;
+  cout<<"newThing is "<<newThing<<endl;
+  cout<<"newThing2 is "<<newThing2<<endl;
+  cout<<"triangle is "<<triangle<<endl;
+  cout<<"triangle2 is "<<triangle2<<endl;
   
   renderList.append(player);
   renderList.append(bg);
@@ -66,6 +72,7 @@ GameState::GameState() {
   isSpaceReleased = true;
   GameCamera::location = player->getPos();
   GameCamera::setFocus(player);
+  GameCamera::set46View();
   GameCamera::setZoomOutView();
   set_pausable(true);
 
@@ -215,10 +222,10 @@ void GameState::applyPhysics() {
       }
       
       if (obj1->grounded) {
+        obj1->setVelocity(obj1->getVelocity().multiply_by(Vector2f(1, 0))); // Stop
         obj1->applyFriction();
-        obj1->setVelocity(obj1->getVelocity().multiply_by(Vector2f(1, 0))); // Stop falling
       } else {
-        obj1->accelerate(Vector2f(0, 0.3)); // Gravity
+        obj1->accelerate(Vector2f(0, GRAVITY)); // Gravity
       }
 
       obj1->move();
@@ -277,11 +284,9 @@ void GameState::perform_logic() {
 }
 
 void GameState::onUpDown() {
-  cout<<"JUMPING. WAS "<<player->getVelocity().y<<endl;
   if (player->grounded) {
     player->accelerate(Vector2f(0, -6)); // Jump!
   }
-  cout<<"Now "<<player->getVelocity().y<<endl;
 }
 
 void GameState::onShiftRelease() {
@@ -310,11 +315,11 @@ void GameState::onSpaceDown() {
 void GameState::render() {
   //get_Video().set_clear_Color(Color(0, 255, 255, 255));
   GameCamera::pan();
-  get_Video().set_2d(GameCamera::get46(), true);
+  get_Video().set_2d(GameCamera::getView(), true);
   
   for (int i=0; i<renderList.length(); i++) {
     GameCamera::renderThing(renderList[i]);
   }
   
-  get_Fonts()["title"].render_text("SPF: " + ulltoa(get_Game().get_fps()), GameCamera::get46().first, Color());
+  get_Fonts()["title"].render_text("SPF: " + ulltoa(get_Game().get_fps()), GameCamera::getView().first, Color());
 }

@@ -2,6 +2,7 @@
 
 Static::Static(float x, float y, float width, float height, float depth) : Thing(x, y, width, height, depth) {
   type |= STATIC;
+  cout<<"this static is "<<this<<" type is "<<type<<endl;
   this->texture = "default";
 }
 

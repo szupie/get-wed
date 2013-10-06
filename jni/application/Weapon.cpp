@@ -2,6 +2,7 @@
 
 Weapon::Weapon(Point2f pos, float width, float height, float depth, int life, int damage) : MovingThing(pos.x, pos.y, width, height, depth) {
   type |= WEAPON;
+  name = NOWEAPON;
   heavy = false;
   friction = 0.7;
   damagePoints = damage;
@@ -44,8 +45,9 @@ void Melee::handleCollision(Thing * thing, int direction) {
   deletable = true;
 }
 
-Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 10, depth, 100, 100) {
+Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 5, depth, 100, 100) {
   //name = BULLET;
+  //renderSize = Vector2f(5, 2.5f);
   texture = "bullet";
 }
 
@@ -53,7 +55,7 @@ Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 10, depth, 100, 100) 
 Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 35, 35, depth, 20, 500) {
   name = BOWLING;
   texture = "bowling";
-  friction = 0.95;
+  friction = 0.98;
   heavy = true;
 }
 
@@ -62,6 +64,7 @@ void Bowling::handleCollision(Thing * thing, int direction) {
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING && velocity.magnitude()>1) {
+      cout<<theThing->type<<"<type it is "<<theThing<<endl;
       theThing->damage(getPos(), damagePoints*velocity.magnitude());
       //this->damage(getPos(), damagePoints); // Indestructable
     }

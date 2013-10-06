@@ -53,6 +53,9 @@ void MovingThing::handleCollision(Thing * thing, int direction) {
   if (direction & Constants::DOWN) {
     grounded = true;
     setPos(getPos().x, thing->getTopAt(getPos().x));
+    if (!moving) {
+      accelerate(thing->getNormal()*Constants::gravity*0.5); // sliding part of normal force
+    }
   } else {
     if (direction & Constants::LEFT) {
       //setPos(getPos().x-getVelocity().x, getPos().y);

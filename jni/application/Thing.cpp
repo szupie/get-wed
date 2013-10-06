@@ -1,10 +1,7 @@
 #include "Thing.h"
 
-Thing::Thing() {
-}
-
 Thing::Thing(float x, float y, float width, float height, float depth) {
-  type |= THING;
+  type = THING;
   held = false;
   flipped = false;
   setPos(x, y);
@@ -30,6 +27,10 @@ void Thing::setSize(float width, float height) {
 void Thing::setSlope(float slope, float intercept) {
   this->slope = slope;
   this->intercept = intercept;
+}
+
+Vector2f Thing::getNormal() {
+  return Vector2f(-slope, 1).normalize();
 }
 
 Point2f Thing::getPos() const {

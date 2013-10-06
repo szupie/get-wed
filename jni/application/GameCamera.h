@@ -11,7 +11,8 @@ class GameCamera {
   public:
     static void setFocus(Thing * object);
     static void setZoomOutView();
-    static pair<Point2f, Point2f> get46();
+    static void set46View();
+    static pair<Point2f, Point2f> getView();
     static Point2f getCenter();
     static void pan();
     
@@ -19,6 +20,8 @@ class GameCamera {
     static float relativeSize;
     static Point2f location;
     static float targetZoom;
+    static float offset;
+    static float targetOffset;
   
   private:
     static Thing * focus;
