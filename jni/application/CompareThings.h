@@ -14,6 +14,14 @@ class CompareThings {
       if (t1->getDepth() > t2->getDepth()) {
         return false;
       } else if (t1->getDepth() == t2->getDepth()) {
+        if (t1->type == t2->type) {
+          return (t1 > t2); // if equal, compare pointers to prevent spazzing out
+        }
+        if (t2->type & STATIC) {
+          return false;
+        } else if (t1->type & STATIC) {
+          return true;
+        }
         if (t2->type & WEAPON) {
           return false;
         } else if (t1->type & WEAPON) {
@@ -27,6 +35,11 @@ class CompareThings {
         if (t2->type & ME) {
           return false;
         } else if (t1->type & ME) {
+          return true;
+        }
+        if (t2->type & SPLATTER) {
+          return false;
+        } else if (t1->type & SPLATTER) {
           return true;
         }
       }

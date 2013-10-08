@@ -6,7 +6,9 @@
 using namespace std;
 using namespace Zeni;
 
-enum ThingType { THING=1, STATIC=1<<1, MOVINGTHING=1<<2, PERSON=1<<3, ME=1<<4, WEAPON=1<<5 };
+enum ThingType { THING=1, STATIC=1<<1, MOVINGTHING=1<<2, PERSON=1<<3, ME=1<<4, WEAPON=1<<5, BRIDESMAID=1<<6, HOBO=1<<7, SPLATTER=1<<8 };
+
+enum weaponName { NOWEAPON, MELEE, BOWLING, SWORD, GUN, MONEY, BEER };
 
 class Thing {
   public:
@@ -39,6 +41,7 @@ class Thing {
   
     bool flipped;
     int type;
+    weaponName name;
 
   protected:
     float x;
@@ -50,7 +53,7 @@ class Thing {
     float intercept;
     bool noRender;
   
-    void render(const String &texture, Point2f pos, Vector2f size, float rotation) const;
+    void render(const String &texture, Point2f pos, Vector2f size, float rotation, Color tint) const;
     void render(const String &texture, Point2f pos, Vector2f size) const;
     
 };

@@ -2,6 +2,7 @@
 
 Thing::Thing(float x, float y, float width, float height, float depth) {
   type = THING;
+  name = NOWEAPON;
   held = false;
   flipped = false;
   setPos(x, y);
@@ -63,7 +64,7 @@ float Thing::getLeft() {
   return getPos().x - width/2;
 }
 
-void Thing::render(const String &texture, Point2f pos, Vector2f size, float rotation) const {
+void Thing::render(const String &texture, Point2f pos, Vector2f size, float rotation, Color tint) const {
   if (!noRender) {
     render_image(texture, 
                  Point2f(pos.x-(renderSize.x/2), pos.y-renderSize.y), 
@@ -72,10 +73,10 @@ void Thing::render(const String &texture, Point2f pos, Vector2f size, float rota
                  1,
                  Point2f(pos.x, pos.y-size.y/2),
                  flipped, 
-                 Color());
+                 tint);
   }
 }
 
 void Thing::render(const String &texture, Point2f pos, Vector2f size) const {
-  render(texture, pos, size, 0);
+  render(texture, pos, size, 0, Color(/*1, depth, depth, depth*/));
 }

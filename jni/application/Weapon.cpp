@@ -2,8 +2,8 @@
 
 Weapon::Weapon(Point2f pos, float width, float height, float depth, int life, int damage) : MovingThing(pos.x, pos.y, width, height, depth) {
   type |= WEAPON;
-  name = NOWEAPON;
   heavy = false;
+  perishable = false;
   friction = 0.7;
   damagePoints = damage;
   maxSpeed = 100;
@@ -16,8 +16,14 @@ void Weapon::handleCollision(Thing * thing, int direction) {
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING) {
+      cout<<this<<" hits "<<theThing<<endl;
       theThing->damage(getPos(), damagePoints*velocity.magnitude());
-      this->damage(getPos(), damagePoints*velocity.magnitude());
+      cout<<"my velo " <<velocity.x<<endl;
+      theThing->accelerate(Vector2f(-velocity.x, -1));
+      cout<<"its velo " <<theThing->getVelocity().x<<endl;
+      if (perishable) {
+        this->damage(getPos(), damagePoints*velocity.magnitude());
+      }
     }
   }
 }
@@ -28,16 +34,20 @@ MovingThing * Weapon::take() {
   return this;
 }
 
-void Weapon::die() {
-  deletable = true;
-  setPos(-9999999, -9999999);
-  cout<<"You can delete "<<this<<" now"<<endl;
+void Weapon::boom() {
+  if (perishable) {
+    deletable = true;
+    setPos(-9999999, -9999999);
+    cout<<"You can delete "<<this<<" now"<<endl;
+  }
 }
 
 
-Melee::Melee(Point2f pos, float depth, int damage) : Weapon(pos, 10, 10, depth, damage, damage) {
+Melee::Melee(Point2f pos, float width, float height, float depth, int damage) : Weapon(pos, width, height, depth, 0, damage) {
   name = MELEE;
-  noRender = true;
+  //noRender = true;
+  texture = "green"; //<<DEBUGGING!
+  perishable = true;
 }
 
 void Melee::handleCollision(Thing * thing, int direction) {
@@ -45,14 +55,15 @@ void Melee::handleCollision(Thing * thing, int direction) {
   deletable = true;
 }
 
-Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 5, depth, 100, 100) {
+Bullet::Bullet(Point2f pos, float depth) : Weapon(pos, 10, 5, depth, 1, 100) {
   //name = BULLET;
   //renderSize = Vector2f(5, 2.5f);
   texture = "bullet";
+  perishable = true;
 }
 
 
-Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 35, 35, depth, 20, 500) {
+Bowling::Bowling(Point2f pos, float depth) : Weapon(pos, 35, 35, depth, 500, 20) {
   name = BOWLING;
   texture = "bowling";
   friction = 0.98;
@@ -64,7 +75,6 @@ void Bowling::handleCollision(Thing * thing, int direction) {
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING && velocity.magnitude()>1) {
-      cout<<theThing->type<<"<type it is "<<theThing<<endl;
       theThing->damage(getPos(), damagePoints*velocity.magnitude());
       //this->damage(getPos(), damagePoints); // Indestructable
     }
@@ -73,39 +83,53 @@ void Bowling::handleCollision(Thing * thing, int direction) {
 
 void Bowling::render(Point2f pos, Vector2f size) const {
   float rotation = -x/50;
-  Thing::render(String(texture), pos, size, rotation);
+  Thing::render(String(texture), pos, size, rotation, Color());
 }
 
 
-Gun::Gun(Point2f pos, float depth) : Weapon(pos, 20, 20, depth, 20, 500) {
+Gun::Gun(Point2f pos, float depth) : Weapon(pos, 26, 13, depth, 500, 20) {
   name = GUN;
   texture = "gun";
   bullets = 6;
 }
 
 void Gun::handleCollision(Thing * thing, int direction) {
-  if (direction & Constants::DOWN) {
-    grounded = true;
-    if (thing->type & STATIC) {
-      setPos(getPos().x, thing->getTopAt(getPos().x));
-    }
-  } else {
-    if (direction & Constants::LEFT) {
-      //setPos(getPos().x-getVelocity().x, getPos().y);
-      if (thing->type & STATIC) {
-        thing->setPos(getLeft()-thing->getSize().x/2, thing->getPos().y);
-      }
-    } else if (direction & Constants::RIGHT) {
-      //setPos(getPos().x-getVelocity().x, getPos().y);
-      if (thing->type & STATIC) {
-        thing->setPos(getRight()+thing->getSize().x/2, thing->getPos().y);
-      }
-    }
-  }
+  MovingThing::handleCollision(thing, direction);
   Weapon::handleCollision(thing, direction);
 }
 
 void Gun::render(Point2f pos, Vector2f size) const {
   float rotation = -x/50;
-  Thing::render(String(texture), pos, size, rotation);
+  Thing::render(String(texture), pos, size, rotation, Color());
+}
+
+
+Sword::Sword(Point2f pos, float depth) : Weapon(pos, 72, 18, depth, 500, 30) {
+  name = SWORD;
+  texture = "sword";
+}
+
+void Sword::handleCollision(Thing * thing, int direction) {
+  MovingThing::handleCollision(thing, direction);
+  Weapon::handleCollision(thing, direction);
+}
+
+void Sword::render(Point2f pos, Vector2f size) const {
+  float rotation = -x/100;
+  Thing::render(String(texture), pos, size, rotation, Color());
+}
+
+
+Money::Money(Point2f pos, float depth, int value) : Weapon(pos, 30, 15, depth, value, 0) {
+  name = MONEY;
+  texture = "money";
+}
+
+void Money::handleCollision(Thing * thing, int direction) {
+  MovingThing::handleCollision(thing, direction);
+}
+
+MovingThing * Money::take() {
+  deletable = true;
+  return this;
 }

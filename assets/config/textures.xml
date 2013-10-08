@@ -101,6 +101,74 @@ The following things are unsupported:
     <filepath>textures/me/mewalk9.png</filepath>
     <tile>0</tile>
   </mewalk9>
+  <mesmack0>
+    <filepath>textures/me/smack0.png</filepath>
+    <tile>0</tile>
+  </mesmack0>
+  <mesmack1>
+    <filepath>textures/me/smack1.png</filepath>
+    <tile>0</tile>
+  </mesmack1>
+  <mesmack2>
+    <filepath>textures/me/smack2.png</filepath>
+    <tile>0</tile>
+  </mesmack2>
+  <mesmack3>
+    <filepath>textures/me/smack3.png</filepath>
+    <tile>0</tile>
+  </mesmack3>
+  <swordrest0>
+    <filepath>textures/me/swordrest0.png</filepath>
+    <tile>0</tile>
+  </swordrest0>
+  <swordwalk0>
+    <filepath>textures/me/swordwalk0.png</filepath>
+    <tile>0</tile>
+  </swordwalk0>
+  <swordwalk1>
+    <filepath>textures/me/swordwalk1.png</filepath>
+    <tile>0</tile>
+  </swordwalk1>
+  <swordwalk2>
+    <filepath>textures/me/swordwalk2.png</filepath>
+    <tile>0</tile>
+  </swordwalk2>
+  <swordwalk3>
+    <filepath>textures/me/swordwalk3.png</filepath>
+    <tile>0</tile>
+  </swordwalk3>
+  <swordhit0>
+    <filepath>textures/me/swordhit0.png</filepath>
+    <tile>0</tile>
+  </swordhit0>
+  <swordhit1>
+    <filepath>textures/me/swordhit1.png</filepath>
+    <tile>0</tile>
+  </swordhit1>
+  <swordhit2>
+    <filepath>textures/me/swordhit2.png</filepath>
+    <tile>0</tile>
+  </swordhit2>
+  <swordthrow0>
+    <filepath>textures/me/swordthrow0.png</filepath>
+    <tile>0</tile>
+  </swordthrow0>
+  <swordthrow1>
+    <filepath>textures/me/swordthrow1.png</filepath>
+    <tile>0</tile>
+  </swordthrow1>
+  <swordthrow2>
+    <filepath>textures/me/swordthrow2.png</filepath>
+    <tile>0</tile>
+  </swordthrow2>
+  <swordthrow3>
+    <filepath>textures/me/gunthrow3.png</filepath>
+    <tile>0</tile>
+  </swordthrow3>
+  <swordthrow4>
+    <filepath>textures/me/gunthrow3.png</filepath>
+    <tile>0</tile>
+  </swordthrow4>
   <gunrest0>
     <filepath>textures/me/gunrest0.png</filepath>
     <tile>0</tile>
@@ -145,6 +213,46 @@ The following things are unsupported:
     <filepath>textures/me/gunfire2.png</filepath>
     <tile>0</tile>
   </gunfire5>
+  <gunsmack0>
+    <filepath>textures/me/gunthrow0.png</filepath>
+    <tile>0</tile>
+  </gunsmack0>
+  <gunsmack1>
+    <filepath>textures/me/gunthrow1.png</filepath>
+    <tile>0</tile>
+  </gunsmack1>
+  <gunsmack2>
+    <filepath>textures/me/gunthrow2.png</filepath>
+    <tile>0</tile>
+  </gunsmack2>
+  <gunsmack3>
+    <filepath>textures/me/gunsmack3.png</filepath>
+    <tile>0</tile>
+  </gunsmack3>
+  <gunsmack4>
+    <filepath>textures/me/gunsmack3.png</filepath>
+    <tile>0</tile>
+  </gunsmack4>
+  <gunthrow0>
+    <filepath>textures/me/gunthrow0.png</filepath>
+    <tile>0</tile>
+  </gunthrow0>
+  <gunthrow1>
+    <filepath>textures/me/gunthrow1.png</filepath>
+    <tile>0</tile>
+  </gunthrow1>
+  <gunthrow2>
+    <filepath>textures/me/gunthrow2.png</filepath>
+    <tile>0</tile>
+  </gunthrow2>
+  <gunthrow3>
+    <filepath>textures/me/gunthrow3.png</filepath>
+    <tile>0</tile>
+  </gunthrow3>
+  <gunthrow4>
+    <filepath>textures/me/gunthrow3.png</filepath>
+    <tile>0</tile>
+  </gunthrow4>
   <bowlingrest0>
     <filepath>textures/me/bowlingrest0.png</filepath>
     <tile>0</tile>
@@ -193,6 +301,142 @@ The following things are unsupported:
     <filepath>textures/me/bowlingthrow6.png</filepath>
     <tile>0</tile>
   </bowlingthrow6>
+  <bmrest0>
+    <filepath>textures/bridesmaid/bmrest0.png</filepath>
+    <tile>0</tile>
+  </bmrest0>
+  <bmrest1>
+    <filepath>textures/bridesmaid/bmrest1.png</filepath>
+    <tile>0</tile>
+  </bmrest1>
+  <bmrest2>
+    <filepath>textures/bridesmaid/bmrest2.png</filepath>
+    <tile>0</tile>
+  </bmrest2>
+  <bmwalk0>
+    <filepath>textures/bridesmaid/bmwalk0.png</filepath>
+    <tile>0</tile>
+  </bmwalk0>
+  <bmwalk1>
+    <filepath>textures/bridesmaid/bmwalk1.png</filepath>
+    <tile>0</tile>
+  </bmwalk1>
+  <bmwalk2>
+    <filepath>textures/bridesmaid/bmwalk2.png</filepath>
+    <tile>0</tile>
+  </bmwalk2>
+  <bmwalk3>
+    <filepath>textures/bridesmaid/bmwalk3.png</filepath>
+    <tile>0</tile>
+  </bmwalk3>
+  <bmwalk4>
+    <filepath>textures/bridesmaid/bmwalk4.png</filepath>
+    <tile>0</tile>
+  </bmwalk4>
+  <bmwalk5>
+    <filepath>textures/bridesmaid/bmwalk5.png</filepath>
+    <tile>0</tile>
+  </bmwalk5>
+  <bmwalk6>
+    <filepath>textures/bridesmaid/bmwalk6.png</filepath>
+    <tile>0</tile>
+  </bmwalk6>
+  <bmwalk7>
+    <filepath>textures/bridesmaid/bmwalk7.png</filepath>
+    <tile>0</tile>
+  </bmwalk7>
+  <bmwalk8>
+    <filepath>textures/bridesmaid/bmwalk8.png</filepath>
+    <tile>0</tile>
+  </bmwalk8>
+  <bmwalk9>
+    <filepath>textures/bridesmaid/bmwalk9.png</filepath>
+    <tile>0</tile>
+  </bmwalk9>
+  <bmdie00>
+    <filepath>textures/bridesmaid/bmdie00.png</filepath>
+    <tile>0</tile>
+  </bmdie00>
+  <bmdie01>
+    <filepath>textures/bridesmaid/bmdie01.png</filepath>
+    <tile>0</tile>
+  </bmdie01>
+  <bmdie02>
+    <filepath>textures/bridesmaid/bmdie02.png</filepath>
+    <tile>0</tile>
+  </bmdie02>
+  <bmdie03>
+    <filepath>textures/bridesmaid/bmdie03.png</filepath>
+    <tile>0</tile>
+  </bmdie03>
+  <bmdie10>
+    <filepath>textures/bridesmaid/bmdie10.png</filepath>
+    <tile>0</tile>
+  </bmdie10>
+  <bmdie11>
+    <filepath>textures/bridesmaid/bmdie11.png</filepath>
+    <tile>0</tile>
+  </bmdie11>
+  <bmdie12>
+    <filepath>textures/bridesmaid/bmdie12.png</filepath>
+    <tile>0</tile>
+  </bmdie12>
+  <bmdie13>
+    <filepath>textures/bridesmaid/bmdie13.png</filepath>
+    <tile>0</tile>
+  </bmdie13>
+  <hoborest0>
+    <filepath>textures/hobo/hoborest0.png</filepath>
+    <tile>0</tile>
+  </hoborest0>
+  <hoborest1>
+    <filepath>textures/hobo/hoborest1.png</filepath>
+    <tile>0</tile>
+  </hoborest1>
+  <hoborest2>
+    <filepath>textures/hobo/hoborest2.png</filepath>
+    <tile>0</tile>
+  </hoborest2>
+  <hobodie00>
+    <filepath>textures/hobo/hobodie00.png</filepath>
+    <tile>0</tile>
+  </hobodie00>
+  <hobodie01>
+    <filepath>textures/hobo/hobodie01.png</filepath>
+    <tile>0</tile>
+  </hobodie01>
+  <hobodie02>
+    <filepath>textures/hobo/hobodie02.png</filepath>
+    <tile>0</tile>
+  </hobodie02>
+  <hobodie03>
+    <filepath>textures/hobo/hobodie03.png</filepath>
+    <tile>0</tile>
+  </hobodie03>
+  <hobodie10>
+    <filepath>textures/hobo/hobodie10.png</filepath>
+    <tile>0</tile>
+  </hobodie10>
+  <hobodie11>
+    <filepath>textures/hobo/hobodie11.png</filepath>
+    <tile>0</tile>
+  </hobodie11>
+  <hobodie12>
+    <filepath>textures/hobo/hobodie12.png</filepath>
+    <tile>0</tile>
+  </hobodie12>
+  <hobodie13>
+    <filepath>textures/hobo/hobodie13.png</filepath>
+    <tile>0</tile>
+  </hobodie13>
+  <money>
+    <filepath>textures/money.png</filepath>
+    <tile>0</tile>
+  </money>
+  <sword>
+    <filepath>textures/sword.png</filepath>
+    <tile>0</tile>
+  </sword>
   <gun>
     <filepath>textures/gun.png</filepath>
     <tile>0</tile>
@@ -205,6 +449,10 @@ The following things are unsupported:
     <filepath>textures/bowling.png</filepath>
     <tile>0</tile>
   </bowling>
+  <blank>
+    <filepath>textures/blank.png</filepath>
+    <tile>0</tile>
+  </blank>
   <triangle>
     <filepath>textures/triangletest.png</filepath>
     <tile>0</tile>
@@ -213,6 +461,66 @@ The following things are unsupported:
     <filepath>textures/triangletestflip.png</filepath>
     <tile>0</tile>
   </triangleflip>
+  <splatter00>
+    <filepath>textures/splatter00.png</filepath>
+    <tile>1</tile>
+  </splatter00>
+  <splatter01>
+    <filepath>textures/splatter01.png</filepath>
+    <tile>1</tile>
+  </splatter01>
+  <splatter02>
+    <filepath>textures/splatter02.png</filepath>
+    <tile>1</tile>
+  </splatter02>
+  <splatter03>
+    <filepath>textures/splatter03.png</filepath>
+    <tile>1</tile>
+  </splatter03>
+  <splatter04>
+    <filepath>textures/splatter04.png</filepath>
+    <tile>1</tile>
+  </splatter04>
+  <splatter10>
+    <filepath>textures/splatter10.png</filepath>
+    <tile>1</tile>
+  </splatter10>
+  <splatter11>
+    <filepath>textures/splatter11.png</filepath>
+    <tile>1</tile>
+  </splatter11>
+  <splatter12>
+    <filepath>textures/splatter12.png</filepath>
+    <tile>1</tile>
+  </splatter12>
+  <splatter13>
+    <filepath>textures/splatter13.png</filepath>
+    <tile>1</tile>
+  </splatter13>
+  <splatter14>
+    <filepath>textures/splatter14.png</filepath>
+    <tile>1</tile>
+  </splatter14>
+  <splatter20>
+    <filepath>textures/splatter20.png</filepath>
+    <tile>1</tile>
+  </splatter20>
+  <splatter21>
+    <filepath>textures/splatter21.png</filepath>
+    <tile>1</tile>
+  </splatter21>
+  <splatter22>
+    <filepath>textures/splatter22.png</filepath>
+    <tile>1</tile>
+  </splatter22>
+  <splatter23>
+    <filepath>textures/splatter23.png</filepath>
+    <tile>1</tile>
+  </splatter23>
+  <splatter24>
+    <filepath>textures/splatter24.png</filepath>
+    <tile>1</tile>
+  </splatter24>
   <ground>
     <filepath>textures/ground.png</filepath>
     <tile>1</tile>

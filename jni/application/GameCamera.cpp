@@ -36,8 +36,8 @@ void GameCamera::pan() {
     relativeSize = relativeSize*0.95 + targetZoom*0.05;
     offset = offset*0.95 + targetOffset*0.05;
   } else { // zooming out
-    relativeSize = relativeSize*0.98 + targetZoom*0.02;
-    offset = offset*0.98 + targetOffset*0.02;
+    relativeSize = relativeSize*0.995 + targetZoom*0.005;
+    offset = offset*0.995 + targetOffset*0.005;
   }
 }
 

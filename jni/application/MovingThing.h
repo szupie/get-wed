@@ -19,7 +19,7 @@ class MovingThing : public Thing {
   
     void applyFriction();
     
-    void accelerate(Vector2f accel);
+    virtual void accelerate(Vector2f accel);
   
     void give(MovingThing * thing);
     
@@ -29,7 +29,7 @@ class MovingThing : public Thing {
   
     virtual void damage(Point2f pos, int points);
   
-    virtual void die();
+    virtual void boom();
   
     int getFace();
   
@@ -40,13 +40,15 @@ class MovingThing : public Thing {
     bool grounded;
     bool moving;
     bool staticed;
+    int life;
+    int money;
     
   protected:
     Vector2f velocity;
     float maxSpeed;
     float friction;
-    int life;
     string texture;
+    int dieFrame;
     MovingThing * holding;
 };
 

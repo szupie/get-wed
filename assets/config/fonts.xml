@@ -49,4 +49,20 @@ Only TrueType fonts are supported.
       <height>600</height>
     </virtual_screen>
   </title>
+  <tiny>
+    <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
+    <height>16</height>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </tiny>
+  <HUD>
+    <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
+    <height>40</height>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </HUD>
 </Fonts>

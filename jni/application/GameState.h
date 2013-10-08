@@ -5,8 +5,9 @@
 #include "ThingsList.h"
 #include "GameCamera.h"
 #include "Me.h"
-#include "Person.h"
+#include "Bridesmaid.h"
 #include "Static.h"
+#include "Splatter.h"
 
 using namespace std;
 using namespace Zeni;

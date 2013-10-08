@@ -4,8 +4,10 @@ MovingThing::MovingThing(float x, float y, float width, float height, float dept
   type |= MOVINGTHING;
   grounded = false;
   moving = false;
+  money = 0;
   staticed = false;
   holding = NULL;
+  dieFrame = 0;
   life = 100;
   texture = "me";
 }
@@ -30,16 +32,20 @@ void MovingThing::accelerate(Vector2f accel) {
   velocity += accel;
   // max land speed
   if (grounded && abs(velocity.x) > maxSpeed) velocity.x = abs(velocity.x)/velocity.x*maxSpeed;
-  if (velocity.x > 0) {
+  if (velocity.x >= 0.5f) {
     flipped = false;
-  } else if (velocity.x < 0) {
+  } else if (velocity.x <= -0.5f) {
     flipped = true;
   }
 }
 
 void MovingThing::give(MovingThing * thing) {
   if (thing != NULL) {
-    holding = thing;
+    if (thing->name == MONEY) {
+      money += thing->life;
+    } else {
+      holding = thing;
+    }
   }
 }
 
@@ -50,6 +56,7 @@ MovingThing * MovingThing::take() {
 }
 
 void MovingThing::handleCollision(Thing * thing, int direction) {
+  if (type & SPLATTER || thing->type & SPLATTER) return; // Ignore splatters
   if (direction & Constants::DOWN) {
     grounded = true;
     setPos(getPos().x, thing->getTopAt(getPos().x));
@@ -57,9 +64,12 @@ void MovingThing::handleCollision(Thing * thing, int direction) {
       accelerate(thing->getNormal()*Constants::gravity*0.5); // sliding part of normal force
     }
   } else {
+    if (direction & (Constants::LEFT | Constants::RIGHT) && this->type & PERSON) {
+      accelerate(Vector2f(-getVelocity().x/*-getFace()*.9f*/, 0));
+    }
     if (direction & Constants::LEFT) {
       //setPos(getPos().x-getVelocity().x, getPos().y);
-      //setPos(thing->getRight()+getSize().x/2, getPos().y);
+      //setPos(thing->getRight()+getSize().x/2, getPos().y);)
       if (thing->type & STATIC) {
         setPos(thing->getRight()+getSize().x/2, getPos().y);
       } else {
@@ -83,13 +93,9 @@ void MovingThing::handleCollision(Thing * thing, int direction) {
 
 void MovingThing::damage(Point2f pos, int points) {
   life -= points;
-  //cout<<this<<" ow! "<<life<<endl;
-  if (life <= 0) {
-    die();
-  }
 }
 
-void MovingThing::die() {
+void MovingThing::boom() {
   staticed = true;
 }
 
@@ -103,6 +109,9 @@ int MovingThing::getFace() {
 void MovingThing::move() {
   this->x += velocity.x;
   this->y += velocity.y;
+  if (life <= 0) {
+    boom();
+  }
 }
   
 void MovingThing::render(Point2f pos, Vector2f size) const {

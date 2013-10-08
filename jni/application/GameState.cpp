@@ -3,23 +3,37 @@
 float GRAVITY = 0.3f;
 
 GameState::GameState() {
-  player = new Me(100, 1000, 32, 94, 1);
-  Person * dude = new Person(700, 1000, 32, 94, 1);
-  player->renderSize = Vector2f(100, 100);
-  dude->renderSize = Vector2f(100, 100);
+  player = new Me(100, 1000, 100, 1);
+  Bridesmaid * dude = new Bridesmaid(700, 1000, 100, 1);
+  Hobo * dude2 = new Hobo(900, 1000, 100, 1);
+  Bridesmaid * dude3 = new Bridesmaid(950, 1000, 100, 1);
+  Bridesmaid * dude4 = new Bridesmaid(1000, 1000, 100, 1);
+  renderList.append(dude2);
+  renderList.append(dude4);
+  renderList.append(dude3);
+  Hobo * hbo1 = new Hobo(-600, 1000, 100, 1);
+  Hobo * hbo2 = new Hobo(-800, 1000, 100, 1);
+  Hobo * hbo3 = new Hobo(-1000, 1000, 100, 1);
+  renderList.append(hbo1);
+  renderList.append(hbo2);
+  renderList.append(hbo3);
   
   Static * bg = new Static(100, 1024, 20480, 1024, 0.5);
   Static * ground = new Static(-500, 1100, 20480, 100, 1);
   Static * ground2 = new Static(-550, 1100, 20480, 100, 0.8);
+  Static * ground3 = new Static(-550, 1100, 20480, 100, 0.7);
   Bowling * bowling = new Bowling(Point2f(-200, 1000), 1);
   Gun * gun = new Gun(Point2f(-300, 1000), 1);
+  Sword * sword = new Sword(Point2f(-400, 1000), 1);
+  Money * stacks = new Money(Point2f(-500, 1000), 1, 25);
   Static * newThing = new Static(-100,1000,100,50,1);
   Static * triangle = new Static(350,1000,200,100,1);
   Static * triangle2 = new Static(550,1000,200,100,1);
-  Static * newThing2 = new Static(0,1000,100,100,1.2);
+  Static * newThing2 = new Static(0,1000,20,250,1.2);
   bg->setTexture("blue");
   ground->setTexture("ground");
   ground2->setTexture("ground");
+  ground3->setTexture("ground");
   newThing->setTexture("green");
   newThing2->setTexture("green");
   triangle->setTexture("triangle");
@@ -55,8 +69,11 @@ GameState::GameState() {
   renderList.append(bg);
   renderList.append(ground);
   renderList.append(ground2);
+  renderList.append(ground3);
   renderList.append(bowling);
   renderList.append(gun);
+  renderList.append(sword);
+  renderList.append(stacks);
   renderList.append(triangle);
   renderList.append(triangle2);
   renderList.append(newThing);
@@ -114,11 +131,14 @@ void GameState::on_joy_axis(const SDL_JoyAxisEvent &event) {
 void GameState::on_key(const SDL_KeyboardEvent &event) {
   switch(event.keysym.sym) {
     case SDLK_a:
+    case SDLK_LEFT:
       isLeftDown = (event.type == SDL_KEYDOWN);
       break;
+    case SDLK_RIGHT:
     case SDLK_d:
       isRightDown = (event.type == SDL_KEYDOWN);
       break;
+    case SDLK_UP:
     case SDLK_w:
       if (!event.repeat && isUpReleased && event.type == SDL_KEYDOWN) {
         onUpDown();
@@ -127,6 +147,7 @@ void GameState::on_key(const SDL_KeyboardEvent &event) {
         isUpReleased = true;
       }
       break;
+    case SDLK_DOWN:
     case SDLK_s:
       if (!event.repeat && isActionReleased && event.type == SDL_KEYDOWN) {
         onActionDown();
@@ -154,12 +175,6 @@ void GameState::on_key(const SDL_KeyboardEvent &event) {
         isSpaceReleased = true;
       }
       break;
-    case SDLK_UP:
-      GameCamera::relativeSize *= 1.05;
-      break;
-    case SDLK_DOWN:
-      GameCamera::relativeSize *= 0.95;
-      break;
     default:
       Gamestate_Base::on_key(event); // Let Gamestate_Base handle it
       break;
@@ -172,7 +187,7 @@ int GameState::checkCollision(MovingThing * obj1, Thing * obj2) {
   if (obj2->type & MOVINGTHING) {
     moveDirection -= ((MovingThing*)obj2)->getVelocity();
   }
-  if (obj1->type & WEAPON && obj2->type & MOVINGTHING && obj1->getVelocity().magnitude()<1) {
+  if (obj1->type & WEAPON && obj2->type & (PERSON | ME) && obj1->getVelocity().magnitude()<1) {
     return 0;
   }
   if (moveDirection.y >= 0 && // Going down or staying
@@ -186,8 +201,8 @@ int GameState::checkCollision(MovingThing * obj1, Thing * obj2) {
   if (moveDirection.x < 0 && // Going left
       obj1->getLeft() <= obj2->getRight() &&
       obj1->getLeft() >= obj2->getLeft() &&
-      // Only check if hitting bottom half
-      obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+obj2->getSize().y*0.5 &&
+      // Only check if hitting bottom 3/4
+      obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+obj2->getSize().y*0.75 &&
       obj1->getTopAt(obj1->getPos().x) < obj2->getBottom()) {
     hitDir = hitDir | LEFT;
   } else if (moveDirection.x > 0 && // Going right
@@ -204,17 +219,32 @@ int GameState::checkCollision(MovingThing * obj1, Thing * obj2) {
 
 void GameState::applyPhysics() {
   //cout<<endl;
+  ThingsList splatters;
   for (int i=0; i<renderList.length(); i++) {
     MovingThing * obj1 = dynamic_cast<MovingThing*>(renderList[i]);
     //cout<<"checking "<<obj1<<endl;
     if (obj1 && !obj1->staticed) { // Is moving object
       //cout<<"checking "<<thingsDebug[obj1]<<endl;
       obj1->grounded = false;
-      for (int j=i+1; j<renderList.length(); j++) {
+      for (int j=0; j<renderList.length(); j++) {
         Thing * obj2 = renderList[j];
-        if (obj2->getDepth() == obj1->getDepth()) {
+        if (obj2->getDepth() == obj1->getDepth() && obj1 != obj2 && !(obj2->type & WEAPON)) {
           int hitDirection = checkCollision(obj1, obj2);
+          if (hitDirection != 0 && obj1->type & WEAPON && obj2->type & PERSON) {
+            float splatterSize = ((Weapon*)obj1)->damagePoints*2;
+            Splatter * splatter = new Splatter(obj1->getPos(), splatterSize, obj1->getDepth());
+            splatter->setPos(obj1->getPos().x-obj1->getFace()*splatter->getSize().x/4, obj1->getPos().y+splatter->getSize().y/2);
+            splatter->setVelocity(Vector2f(-1*obj1->getFace(), -1));
+            splatters.append(splatter);
+            cout<<"SPLAT size"<<splatterSize<<endl;
+          }
+          //if ((obj1->type | obj2->type) & WEAPON) cout<<obj1<<" plus "<<obj2<<" this and ";
           obj1->handleCollision(obj2, hitDirection);
+          //if (obj2->type & MOVINGTHING) {
+          //  hitDirection ^= LEFT | RIGHT; // flip horiz direction
+          //  ((MovingThing*)obj2)->handleCollision(obj1, hitDirection);
+          //}
+          //if (hitDirection != 0) cout<<"going in "<<hitDirection<<" hit is "<<thingsDebug[obj1]<<" and "<<thingsDebug[obj2]<<"; obj1type: "<<obj1->type<<", ojb2type: "<<obj2->type<<endl;
           //cout<<obj1<<" vs. "<<obj2<<endl;
         } else if (obj2->getDepth() > obj1->getDepth()) { // reach end of depth
           break;
@@ -227,9 +257,12 @@ void GameState::applyPhysics() {
       } else {
         obj1->accelerate(Vector2f(0, GRAVITY)); // Gravity
       }
-
-      obj1->move();
     }
+    
+    if (obj1) obj1->move();
+  }
+  for (int i=0; i<splatters.length(); i++) {
+    renderList.append(splatters[i]);
   }
 }
   
@@ -245,7 +278,7 @@ void GameState::perform_logic() {
   for (int i=renderList.length()-1; i>=0; i--) {
     if (i < renderList.length()) {
       if (renderList[i]->deletable) {
-        cout<<"deleting "<<renderList[i]<<endl;
+        //cout<<"deleting "<<renderList[i]<<endl;
         delete renderList.remove(i);
       } else if (renderList[i]->held) {
         renderList.remove(i);
@@ -275,7 +308,7 @@ void GameState::perform_logic() {
   for (int i=0; i<renderList.length(); i++) {
     Person * peep = (Person*)renderList[i];
     //cout<<renderList[i]->type<<(renderList[i]->type & PERSON)<<endl;
-    if (peep->type & PERSON && !peep->staticed) {
+    if (peep->type & PERSON && peep->follower && !peep->staticed) {
       peep->walkTo(interval, player->getPos().x);
     }
   }
@@ -298,7 +331,7 @@ void GameState::onActionDown() {
     if (renderList[i]->getDepth() == player->getDepth() && renderList[i]->type & MOVINGTHING) {
       Vector2f distance = renderList[i]->getPos() - player->getPos();
       if (player->flipped) distance.x *= -1;
-      if (distance.x > 0 && distance.x < player->getSize().x) { // if within range of player
+      if (distance.x > -player->getSize().x && distance.x < player->getSize().x*2) { // if within range of player
         player->action((MovingThing*)renderList[i]);
         cout<<"actioning "<<thingsDebug[renderList[i]]<<endl;
       }
@@ -321,5 +354,8 @@ void GameState::render() {
     GameCamera::renderThing(renderList[i]);
   }
   
-  get_Fonts()["title"].render_text("SPF: " + ulltoa(get_Game().get_fps()), GameCamera::getView().first, Color());
+  get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(1280.0f, 800.0f)), true);
+  get_Fonts()["tiny"].render_text("FPS: " + ulltoa(get_Game().get_fps()), Point2f(0.0f, 800.0f-64.0f), Color());
+  get_Fonts()["HUD"].render_text("Cash: $" + ulltoa(player->money), Point2f(1280.0f, 0.0f), Color(), ZENI_RIGHT);
+  get_Fonts()["HUD"].render_text("Clean Dress: " + ulltoa(100-player->dirtiness/10) + "%", Point2f(0.0f, 0.0f), Color());
 }

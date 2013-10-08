@@ -12,12 +12,14 @@ using namespace Zeni;
 
 class Me : public MovingThing {
   public:
-    Me(float x=0, float y=0, float width=0, float height=0, float depth=1);
+    Me(float x=0, float y=0, float size=0, float depth=1);
   
     void attack();
     Point2f getAttackPoint();
     Point2f getThrowPoint();
     void action(MovingThing* thing);
+    
+    void handleCollision(Thing * thing, int direction);
   
     void doThrow();
     void chargeThrow(int frame);
@@ -29,11 +31,15 @@ class Me : public MovingThing {
   
     // Attacks
     void smack(int frame);
+    void slash(int frame);
     void shoot(int frame);
   
     int walkingAccel;
     float currentFrame;
     ThingsList * renderList;
+    int dirtiness;
+    
+    void render(Point2f pos, Vector2f size) const;
   
   private:
     void (Me::*currentAction)(int);

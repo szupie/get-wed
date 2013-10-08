@@ -3,29 +3,28 @@
 
 #include <zenilib.h>
 #include "MovingThing.h"
+#include "Me.h"
 
 using namespace std;
 using namespace Zeni;
-
-enum weaponName { NOWEAPON, MELEE, BOWLING, SWORD, GUN, MONEY, BEER };
 
 class Weapon : public MovingThing {
   public:
     Weapon(Point2f pos, float width, float height, float depth, int life, int damage);
     
     virtual void handleCollision(Thing * thing, int direction);
-    MovingThing * take();
-    void die();
+    virtual MovingThing * take();
+    void boom();
     bool heavy;
-    weaponName name;
-  protected:
     int damagePoints;
+  protected:
+    bool perishable;
     
 };
 
 class Melee : public Weapon {
 public:
-  Melee(Point2f pos, float depth, int damage);
+  Melee(Point2f pos, float width, float height, float depth, int damage);
   void handleCollision(Thing * thing, int direction);
 };
 
@@ -47,6 +46,20 @@ public:
   void handleCollision(Thing * thing, int direction);
   void render(Point2f pos, Vector2f size) const;
   int bullets;
+};
+
+class Sword : public Weapon {
+public:
+  Sword(Point2f pos, float depth);
+  void handleCollision(Thing * thing, int direction);
+  void render(Point2f pos, Vector2f size) const;
+};
+
+class Money : public Weapon {
+public:
+  Money(Point2f pos, float depth, int value);
+  void handleCollision(Thing * thing, int direction);
+  MovingThing * take();
 };
 
 #endif // HEADER FILE
