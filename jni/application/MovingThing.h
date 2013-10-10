@@ -21,7 +21,7 @@ class MovingThing : public Thing {
     
     virtual void accelerate(Vector2f accel);
   
-    void give(MovingThing * thing);
+    virtual void give(MovingThing * thing);
     
     virtual MovingThing * take();
     
@@ -32,6 +32,7 @@ class MovingThing : public Thing {
     virtual void boom();
   
     int getFace();
+    int holds();
   
     virtual void move();
   

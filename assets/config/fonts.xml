@@ -43,23 +43,27 @@ Only TrueType fonts are supported.
   </system_36_800x600>
   <title>
     <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
-    <height>92</height>
+    <height>120</height>
     <virtual_screen>
       <width>800</width>
       <height>600</height>
     </virtual_screen>
   </title>
-  <tiny>
+  <ingame>
     <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
-    <height>16</height>
+    <height>20</height>
+  </ingame>
+  <time>
+    <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
+    <height>120</height>
     <virtual_screen>
       <width>800</width>
       <height>600</height>
     </virtual_screen>
-  </tiny>
+  </time>
   <HUD>
     <filepath>fonts/JohnstonITCStd-Light.otf</filepath>
-    <height>40</height>
+    <height>32</height>
     <virtual_screen>
       <width>800</width>
       <height>600</height>

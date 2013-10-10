@@ -9,7 +9,7 @@ MovingThing::MovingThing(float x, float y, float width, float height, float dept
   holding = NULL;
   dieFrame = 0;
   life = 100;
-  texture = "me";
+  texture = "blank";
 }
   
 MovingThing::~MovingThing() {}
@@ -43,7 +43,7 @@ void MovingThing::give(MovingThing * thing) {
   if (thing != NULL) {
     if (thing->name == MONEY) {
       money += thing->life;
-    } else {
+    } else if (thing->name != BLEACH) {
       holding = thing;
     }
   }
@@ -63,9 +63,16 @@ void MovingThing::handleCollision(Thing * thing, int direction) {
     if (!moving) {
       accelerate(thing->getNormal()*Constants::gravity*0.5); // sliding part of normal force
     }
+  } else if (direction & Constants::UP) {
+    setPos(getPos().x, thing->getBottom()+getSize().y);
+    setVelocity(Vector2f(getVelocity().x, 0));
   } else {
-    if (direction & (Constants::LEFT | Constants::RIGHT) && this->type & PERSON) {
-      accelerate(Vector2f(-getVelocity().x/*-getFace()*.9f*/, 0));
+    if (direction & (Constants::LEFT | Constants::RIGHT)) {
+      if (this->type & PERSON) {
+        accelerate(Vector2f(-getVelocity().x/*-getFace()*.9f*/, 0));
+      } else {
+        accelerate(Vector2f(-getVelocity().x*0.1f, 0));
+      }
     }
     if (direction & Constants::LEFT) {
       //setPos(getPos().x-getVelocity().x, getPos().y);
@@ -104,6 +111,13 @@ int MovingThing::getFace() {
     return -1;
   }
   return 1;
+}
+
+int MovingThing::holds() {
+  if (holding != NULL) {
+    return holding->name;
+  }
+  return 0;
 }
   
 void MovingThing::move() {

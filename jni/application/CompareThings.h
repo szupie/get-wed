@@ -14,9 +14,6 @@ class CompareThings {
       if (t1->getDepth() > t2->getDepth()) {
         return false;
       } else if (t1->getDepth() == t2->getDepth()) {
-        if (t1->type == t2->type) {
-          return (t1 > t2); // if equal, compare pointers to prevent spazzing out
-        }
         if (t2->type & STATIC) {
           return false;
         } else if (t1->type & STATIC) {
@@ -28,6 +25,9 @@ class CompareThings {
           return true;
         }
         if (t2->type & PERSON) {
+          if (t1->type & t2->type & PERSON) {
+            return (t1 > t2); // if equal, compare pointers to prevent spazzing out
+          }
           return false;
         } else if (t1->type & PERSON) {
           return true;

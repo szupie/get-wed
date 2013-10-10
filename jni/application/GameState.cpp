@@ -3,82 +3,7 @@
 float GRAVITY = 0.3f;
 
 GameState::GameState() {
-  player = new Me(100, 1000, 100, 1);
-  Bridesmaid * dude = new Bridesmaid(700, 1000, 100, 1);
-  Hobo * dude2 = new Hobo(900, 1000, 100, 1);
-  Bridesmaid * dude3 = new Bridesmaid(950, 1000, 100, 1);
-  Bridesmaid * dude4 = new Bridesmaid(1000, 1000, 100, 1);
-  renderList.append(dude2);
-  renderList.append(dude4);
-  renderList.append(dude3);
-  Hobo * hbo1 = new Hobo(-600, 1000, 100, 1);
-  Hobo * hbo2 = new Hobo(-800, 1000, 100, 1);
-  Hobo * hbo3 = new Hobo(-1000, 1000, 100, 1);
-  renderList.append(hbo1);
-  renderList.append(hbo2);
-  renderList.append(hbo3);
-  
-  Static * bg = new Static(100, 1024, 20480, 1024, 0.5);
-  Static * ground = new Static(-500, 1100, 20480, 100, 1);
-  Static * ground2 = new Static(-550, 1100, 20480, 100, 0.8);
-  Static * ground3 = new Static(-550, 1100, 20480, 100, 0.7);
-  Bowling * bowling = new Bowling(Point2f(-200, 1000), 1);
-  Gun * gun = new Gun(Point2f(-300, 1000), 1);
-  Sword * sword = new Sword(Point2f(-400, 1000), 1);
-  Money * stacks = new Money(Point2f(-500, 1000), 1, 25);
-  Static * newThing = new Static(-100,1000,100,50,1);
-  Static * triangle = new Static(350,1000,200,100,1);
-  Static * triangle2 = new Static(550,1000,200,100,1);
-  Static * newThing2 = new Static(0,1000,20,250,1.2);
-  bg->setTexture("blue");
-  ground->setTexture("ground");
-  ground2->setTexture("ground");
-  ground3->setTexture("ground");
-  newThing->setTexture("green");
-  newThing2->setTexture("green");
-  triangle->setTexture("triangle");
-  triangle2->setTexture("triangleflip");
-  triangle->setSlope(0.5, 100);
-  triangle2->setSlope(-0.5, -100);
-  player->renderList = &renderList;
-  
-  thingsDebug[player] = "Player";
-  thingsDebug[ground] = "ground";
-  thingsDebug[ground2] = "ground2";
-  thingsDebug[bowling] = "bowling";
-  thingsDebug[gun] = "Gun";
-  thingsDebug[newThing] = "newThing";
-  thingsDebug[newThing2] = "newThing2";
-  thingsDebug[triangle] = "triangle1";
-  thingsDebug[triangle2] = "triangle2";
-  thingsDebug[bg] = "bg";
-  thingsDebug[dude] = "dude";
-  
-  cout<<"Player is "<<player<<endl;
-  cout<<"dude is "<<dude<<endl;
-  cout<<"gun is "<<gun<<endl;
-  cout<<"bg is "<<bg<<endl;
-  cout<<"ground is "<<ground<<endl;
-  cout<<"bowling is "<<bowling<<endl;
-  cout<<"newThing is "<<newThing<<endl;
-  cout<<"newThing2 is "<<newThing2<<endl;
-  cout<<"triangle is "<<triangle<<endl;
-  cout<<"triangle2 is "<<triangle2<<endl;
-  
-  renderList.append(player);
-  renderList.append(bg);
-  renderList.append(ground);
-  renderList.append(ground2);
-  renderList.append(ground3);
-  renderList.append(bowling);
-  renderList.append(gun);
-  renderList.append(sword);
-  renderList.append(stacks);
-  renderList.append(triangle);
-  renderList.append(triangle2);
-  renderList.append(newThing);
-  renderList.append(newThing2);
-  renderList.append(dude);
+  player = new Me(0, 0, 100, 1);
   
   // Initialise
   timePassed = 0.0f;
@@ -87,11 +12,27 @@ GameState::GameState() {
   isActionReleased = true;
   isUpReleased = true;
   isSpaceReleased = true;
+  homelessKilled = 0;
+  bmKilled = 0;
+  Bridesmaid::initFeelings();
+  
+  renderList.append(player);
+  Person::renderList = &renderList;
+  Person::textList = &textList;
+  player->renderList = &renderList;
+  textList.push_back(player->myText);
+  timeDisplay = new string();
+  
   GameCamera::location = player->getPos();
   GameCamera::setFocus(player);
   GameCamera::set46View();
   GameCamera::setZoomOutView();
-  set_pausable(true);
+  
+  makeLevel(0);
+  //player->setPos(8800+1550, 525);
+  //makeLevel(4);
+  //set_pausable(true);
+  //weddingTimer.start();
 
   gameTimer.start();
 }
@@ -100,6 +41,7 @@ GameState::~GameState() {
   while (!renderList.empty()) {
     renderList.pop();
   }
+  checkpoints.clear();
 }
 
 void GameState::on_push() {
@@ -152,7 +94,7 @@ void GameState::on_key(const SDL_KeyboardEvent &event) {
       if (!event.repeat && isActionReleased && event.type == SDL_KEYDOWN) {
         onActionDown();
         isActionReleased = false;
-        GameCamera::targetZoom = 0.7;
+        GameCamera::targetZoom = 0.4;
       }
       if (event.type == SDL_KEYUP) {
         isActionReleased = true;
@@ -190,26 +132,38 @@ int GameState::checkCollision(MovingThing * obj1, Thing * obj2) {
   if (obj1->type & WEAPON && obj2->type & (PERSON | ME) && obj1->getVelocity().magnitude()<1) {
     return 0;
   }
-  if (moveDirection.y >= 0 && // Going down or staying
-      // 5px buffer to assist stair declimbing
-      obj1->getBottom()+5 >= obj2->getTopAt(obj1->getPos().x) &&
+  if (obj1->getBottom() >= obj2->getTopAt(obj1->getPos().x) &&
       obj1->getBottom() <= obj2->getBottom() &&
       obj1->getPos().x > obj2->getLeft() &&
       obj1->getPos().x < obj2->getRight()) {
-    hitDir = hitDir | DOWN;
+    hitDir |= IN;
   }
+  if (moveDirection.y >= 0 && // Going down or staying
+      // 5px buffer to assist stair declimbing
+      obj1->getBottom()+5 >= obj2->getTopAt(obj1->getPos().x) &&
+      obj1->getBottom() <= obj2->getTopAt(obj1->getPos().x)+obj1->getSize().y &&
+      obj1->getPos().x > obj2->getLeft() &&
+      obj1->getPos().x < obj2->getRight()) {
+    hitDir = hitDir | DOWN;
+  } else if (moveDirection.y < 0 && // Going up
+        obj1->getTopAt(obj1->getPos().x) <= obj2->getBottom() &&
+        obj1->getTopAt(obj1->getPos().x) >= obj2->getBottom()-obj1->getSize().y &&
+        obj1->getPos().x > obj2->getLeft() &&
+        obj1->getPos().x < obj2->getRight()) {
+    hitDir = hitDir | UP;
+  } else
   if (moveDirection.x < 0 && // Going left
       obj1->getLeft() <= obj2->getRight() &&
       obj1->getLeft() >= obj2->getLeft() &&
-      // Only check if hitting bottom 3/4
-      obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+obj2->getSize().y*0.75 &&
+      // 30px buffer
+      obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+20 &&
       obj1->getTopAt(obj1->getPos().x) < obj2->getBottom()) {
     hitDir = hitDir | LEFT;
   } else if (moveDirection.x > 0 && // Going right
              obj1->getRight() >= obj2->getLeft() &&
              obj1->getRight() <= obj2->getRight() &&
-             // Only check if hitting bottom half
-             obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+obj2->getSize().y/2 &&
+             // 30px buffer
+             obj1->getBottom() > obj2->getTopAt(obj1->getPos().x)+20 &&
              obj1->getTopAt(obj1->getPos().x) < obj2->getBottom()) {
     hitDir = hitDir | RIGHT;
   }
@@ -224,38 +178,38 @@ void GameState::applyPhysics() {
     MovingThing * obj1 = dynamic_cast<MovingThing*>(renderList[i]);
     //cout<<"checking "<<obj1<<endl;
     if (obj1 && !obj1->staticed) { // Is moving object
-      //cout<<"checking "<<thingsDebug[obj1]<<endl;
-      obj1->grounded = false;
-      for (int j=0; j<renderList.length(); j++) {
-        Thing * obj2 = renderList[j];
-        if (obj2->getDepth() == obj1->getDepth() && obj1 != obj2 && !(obj2->type & WEAPON)) {
-          int hitDirection = checkCollision(obj1, obj2);
-          if (hitDirection != 0 && obj1->type & WEAPON && obj2->type & PERSON) {
-            float splatterSize = ((Weapon*)obj1)->damagePoints*2;
-            Splatter * splatter = new Splatter(obj1->getPos(), splatterSize, obj1->getDepth());
-            splatter->setPos(obj1->getPos().x-obj1->getFace()*splatter->getSize().x/4, obj1->getPos().y+splatter->getSize().y/2);
-            splatter->setVelocity(Vector2f(-1*obj1->getFace(), -1));
-            splatters.append(splatter);
-            cout<<"SPLAT size"<<splatterSize<<endl;
+      if (obj1->getDepth() == 1) {
+        obj1->grounded = false;
+        for (int j=0; j<renderList.length(); j++) {
+          Thing * obj2 = renderList[j];
+          if (obj2 && obj2->getDepth() == obj1->getDepth() && obj1 != obj2 && !(obj2->type & WEAPON)) {
+            int hitDirection = checkCollision(obj1, obj2);
+            if (hitDirection != 0 && obj1->type & WEAPON && obj2->type & PERSON) {
+              float splatterSize = ((Weapon*)obj1)->damagePoints*2;
+              Splatter * splatter = new Splatter(obj1->getPos(), splatterSize, obj1->getDepth());
+              splatter->setPos(obj1->getPos().x-obj1->getFace()*splatter->getSize().x/4, obj1->getPos().y+splatter->getSize().y/2);
+              splatter->setVelocity(Vector2f(-1*obj1->getFace(), -1));
+              splatters.append(splatter);
+            }
+            //if ((obj1->type | obj2->type) & WEAPON) cout<<obj1<<" plus "<<obj2<<" this and ";
+            obj1->handleCollision(obj2, hitDirection);
+            //if (obj2->type & MOVINGTHING) {
+            //  hitDirection ^= LEFT | RIGHT; // flip horiz direction
+            //  ((MovingThing*)obj2)->handleCollision(obj1, hitDirection);
+            //}
+            //if (hitDirection != 0) cout<<"going in "<<hitDirection<<" hit is "<<thingsDebug[obj1]<<" and "<<thingsDebug[obj2]<<"; obj1type: "<<obj1->type<<", ojb2type: "<<obj2->type<<endl;
+            //cout<<obj1<<" vs. "<<obj2<<endl;
+          } else if (obj2->getDepth() > 1) { // reach end of depth
+            break;
           }
-          //if ((obj1->type | obj2->type) & WEAPON) cout<<obj1<<" plus "<<obj2<<" this and ";
-          obj1->handleCollision(obj2, hitDirection);
-          //if (obj2->type & MOVINGTHING) {
-          //  hitDirection ^= LEFT | RIGHT; // flip horiz direction
-          //  ((MovingThing*)obj2)->handleCollision(obj1, hitDirection);
-          //}
-          //if (hitDirection != 0) cout<<"going in "<<hitDirection<<" hit is "<<thingsDebug[obj1]<<" and "<<thingsDebug[obj2]<<"; obj1type: "<<obj1->type<<", ojb2type: "<<obj2->type<<endl;
-          //cout<<obj1<<" vs. "<<obj2<<endl;
-        } else if (obj2->getDepth() > obj1->getDepth()) { // reach end of depth
-          break;
         }
-      }
-      
-      if (obj1->grounded) {
-        obj1->setVelocity(obj1->getVelocity().multiply_by(Vector2f(1, 0))); // Stop
-        obj1->applyFriction();
-      } else {
-        obj1->accelerate(Vector2f(0, GRAVITY)); // Gravity
+        
+        if (obj1->grounded) {
+          obj1->setVelocity(obj1->getVelocity().multiply_by(Vector2f(1, 0))); // Stop
+          obj1->applyFriction();
+        } else {
+          obj1->accelerate(Vector2f(0, GRAVITY)); // Gravity
+        }
       }
     }
     
@@ -273,7 +227,6 @@ void GameState::perform_logic() {
   //cout<<endl<<"Start of moment, interval is "<<interval<<endl;
   
   // Clean up
-  int tempDepth = renderList[renderList.length()-1]->getDepth();
   bool outOfOrder = false;
   for (int i=renderList.length()-1; i>=0; i--) {
     if (i < renderList.length()) {
@@ -283,7 +236,7 @@ void GameState::perform_logic() {
       } else if (renderList[i]->held) {
         renderList.remove(i);
       }
-      if (tempDepth < renderList[i]->getDepth()) {
+      if (i > 0 && CompareThings::compare(renderList[i], renderList[i-1])) {
         outOfOrder = true;
       }
     }
@@ -306,18 +259,31 @@ void GameState::perform_logic() {
   
   // Apply AI
   for (int i=0; i<renderList.length(); i++) {
-    Person * peep = (Person*)renderList[i];
+    Person * peep = dynamic_cast<Person*>(renderList[i]);
     //cout<<renderList[i]->type<<(renderList[i]->type & PERSON)<<endl;
-    if (peep->type & PERSON && peep->follower && !peep->staticed) {
-      peep->walkTo(interval, player->getPos().x);
+    if (peep) {
+      if (peep->type & PERSON && !peep->staticed) {
+        peep->lookTo(interval, player->getPos());
+      }
+      if (peep->inSight && peep->life <= 0 && peep->currentFrame <= 1) { // just died
+        if (peep->type & HOBO) {
+          homelessKilled++;
+        } else if (peep->type & BRIDESMAID) {
+          bmKilled++;
+        }
+        player->insult(peep->type);
+      }
     }
   }
+  
+  string textBubble = checkCheckpoints();
+  if (textBubble != "xx") player->say(textBubble);
   
   applyPhysics();
 }
 
 void GameState::onUpDown() {
-  if (player->grounded) {
+  if (player->grounded && !(player->holds() == BOWLING) ) {
     player->accelerate(Vector2f(0, -6)); // Jump!
   }
 }
@@ -346,7 +312,7 @@ void GameState::onSpaceDown() {
 }
   
 void GameState::render() {
-  //get_Video().set_clear_Color(Color(0, 255, 255, 255));
+  get_Video().set_clear_Color(Color(1, .004f, .678f, .933f));
   GameCamera::pan();
   get_Video().set_2d(GameCamera::getView(), true);
   
@@ -354,8 +320,14 @@ void GameState::render() {
     GameCamera::renderThing(renderList[i]);
   }
   
+  for (uint i=0; i<textList.size(); i++) {
+    GameCamera::renderText(textList[i]);
+  }
+  
   get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(1280.0f, 800.0f)), true);
-  get_Fonts()["tiny"].render_text("FPS: " + ulltoa(get_Game().get_fps()), Point2f(0.0f, 800.0f-64.0f), Color());
-  get_Fonts()["HUD"].render_text("Cash: $" + ulltoa(player->money), Point2f(1280.0f, 0.0f), Color(), ZENI_RIGHT);
-  get_Fonts()["HUD"].render_text("Clean Dress: " + ulltoa(100-player->dirtiness/10) + "%", Point2f(0.0f, 0.0f), Color());
+  get_Fonts()["HUD"].render_text("Cash: $" + ulltoa(player->money), Point2f(1280.0f, 800.0f-40.0f), Color(0.5f,1,1,1), ZENI_RIGHT);
+  get_Fonts()["HUD"].render_text("Clean Dress: " + ulltoa(max(100-player->dirtiness/10, 0)) + "%", Point2f(0.0f, 800.0f-40.0f), Color());
+  
+  //get_Fonts()["tiny"].render_text("FPS: " + ulltoa(get_Game().get_fps()), Point2f(0.0f, 800.0f-16.0f), Color());
+  //get_Fonts()["time"].render_text(String(timeDisplay), Point2f(640.0f, 800.0f-40.0f), Color(0.5f,1,1,1), ZENI_CENTER);
 }

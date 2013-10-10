@@ -3,7 +3,6 @@
 
 #include <zenilib.h>
 #include "MovingThing.h"
-#include "Me.h"
 
 using namespace std;
 using namespace Zeni;
@@ -58,6 +57,13 @@ public:
 class Money : public Weapon {
 public:
   Money(Point2f pos, float depth, int value);
+  void handleCollision(Thing * thing, int direction);
+  MovingThing * take();
+};
+
+class Bleach : public Weapon {
+public:
+  Bleach(Point2f pos, float depth);
   void handleCollision(Thing * thing, int direction);
   MovingThing * take();
 };

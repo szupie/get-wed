@@ -36,18 +36,14 @@ class Instructions_State : public Widget_Gamestate {
     void render() {
       Widget_Gamestate::render();
 
-      Zeni::Font &fr = get_Fonts()["title"];
+      Zeni::Font &fr = get_Fonts()["HUD"];
 
-      fr.render_text(
-#if defined(_WINDOWS)
-                   "ALT+F4"
-#elif defined(_MACOSX)
-                   "Apple+Q"
-#else
-                   "Ctrl+Q"
-#endif
-                   " to Quit",
-                     Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
+      fr.render_text("LEFT and RIGHT to move\n"
+                     "UP to jump\n"
+                     "DOWN to interact with environment\n"
+                     "SPACE to attack\n"
+                     "SHIFT to throw object",
+                     Point2f(400.0f, 200.0f - 0.5f * fr.get_text_height()),
                      get_Colors()["title_text"],
                      ZENI_CENTER);
     }
@@ -58,14 +54,14 @@ class Bootstrap {
     virtual Gamestate_Base * operator()() {
       Window::set_title("Get Wed");
 
-      get_Joysticks();
+      //get_Joysticks();
       get_Video();
       get_Textures();
       get_Fonts();
       get_Sounds();
-      get_Game().joy_mouse.enabled = true;
+      //get_Game().joy_mouse.enabled = true;
 
-      return new Title_State<GameState, Instructions_State>("GET WED\nYOU TWIT");
+      return new Title_State<GameState, Instructions_State>("GET WED!");
     }
   } m_goi;
 

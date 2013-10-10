@@ -3,6 +3,7 @@
 
 #include <zenilib.h>
 #include "Thing.h"
+#include "Text.h"
 
 using namespace std;
 using namespace Zeni;
@@ -17,6 +18,7 @@ class GameCamera {
     static void pan();
     
     static void renderThing(Thing * thing);
+    static void renderText(Text * text);
     static float relativeSize;
     static Point2f location;
     static float targetZoom;

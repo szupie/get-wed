@@ -24,9 +24,9 @@ pair<Point2f, Point2f> GameCamera::getView() {
   Vector2f viewSize = Vector2f(focus->getSize().y/relativeSize*1.6f, 
                                focus->getSize().y/relativeSize);
   Point2f topLeft = Point2f(center.x - (viewSize*offset).x, 
-                            center.y - viewSize.y + focus->getSize().y/relativeSize*0.1);
+                            center.y - viewSize.y + focus->getSize().y/relativeSize*0.15);
   Point2f bottomRight = Point2f(center.x + (viewSize*(1-offset)).x, 
-                                center.y + focus->getSize().y/relativeSize*0.1);
+                                center.y + focus->getSize().y/relativeSize*0.15);
   return make_pair(topLeft, bottomRight);
 }
 
@@ -43,6 +43,15 @@ void GameCamera::pan() {
 
 Point2f GameCamera::getCenter() {
   return location;
+}
+
+void GameCamera::renderText(Text * text) {
+  float textDepth = text->depth;;
+  float depthVerticalOffset = (textDepth-1)*100;
+  Point2f parallax = Point2f((text->x-getCenter().x)*textDepth+getCenter().x, 
+                             (text->y-getCenter().y+depthVerticalOffset)*textDepth+getCenter().y);
+  
+  text->render(parallax);
 }
     
 void GameCamera::renderThing(Thing * thing) {

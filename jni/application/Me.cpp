@@ -1,7 +1,7 @@
 #include "Me.h"
 
 float ACCEL = 8;
-float MAXSPEED = 5;
+float MAXSPEED = 4;
 
 Me::Me(float x, float y, float size, float depth) : MovingThing(x, y, size*.32f, size*.94f, depth) {
   type |= ME;
@@ -13,15 +13,15 @@ Me::Me(float x, float y, float size, float depth) : MovingThing(x, y, size*.32f,
   dirtiness = 0;
   currentAction = NULL;
   currentFrame = 0;
+  myText = new Text(x, y, depth);
 }
 
 void Me::attack() {
-  this->renderList = renderList;
   if (currentAction == NULL) {
     actionCounter = 0;
     if (holding == NULL) {
       currentAction = &Me::smack;
-      GameCamera::targetZoom = 0.5;
+      GameCamera::targetZoom = 0.4;
     } else {
       // What's the attack?
       Weapon * weapon = (Weapon*)holding;
@@ -39,7 +39,7 @@ void Me::attack() {
       if (weapon->name == SWORD) {
         currentAction = &Me::slash;
       }
-      GameCamera::targetZoom = 0.5;
+      GameCamera::targetZoom = 0.4;
     }
   }
 }
@@ -51,7 +51,7 @@ void Me::smack(int frame) {
     sprites = 5;
   }
   if (frame == 3*totalFrames/sprites) {
-    Melee * smackPoint = new Melee(getAttackPoint(), 10, 10, getDepth(), 20);
+    Melee * smackPoint = new Melee(getAttackPoint(), 20, 20, getDepth(), 20);
     // damage = speed*dp, so x1
     smackPoint->accelerate(Vector2f(getFace(),0));
     renderList->append(smackPoint);
@@ -75,7 +75,7 @@ void Me::slash(int frame) {
   int sprites = 3;
   if (frame == 1*totalFrames/sprites) {
     Vector2f area = ((Weapon*)holding)->getSize();
-    Melee * slashPoint = new Melee(getAttackPoint(), area.x, area.y, getDepth(), 50);
+    Melee * slashPoint = new Melee(getAttackPoint()+Vector2f(0, area.y), area.x, area.y*2, getDepth(), 50);
     // damage = speed*dp, so x1
     slashPoint->accelerate(Vector2f(getFace(),0));
     renderList->append(slashPoint);
@@ -139,20 +139,27 @@ void Me::action(MovingThing * thing) {
     thing->money += howMuch;
     money -= howMuch;
   }
+  if (thing->type & BRIDESMAID && !((Bridesmaid*)thing)->talking) {
+    ((Bridesmaid*)thing)->talking = true;
+    ((Bridesmaid*)thing)->talkTimer.reset();
+    cout<<((Bridesmaid*)thing)->talkTimer.seconds()<<endl;
+    ((Bridesmaid*)thing)->talkTimer.start();
+  }
   if (holding == NULL) give(thing->take());
   if (holding != NULL && holding->type & WEAPON) {
     if (((Weapon*)holding)->heavy) {
       maxSpeed = MAXSPEED/2;
       walkingAccel = ACCEL/2;
-      cout<<"SLOWED"<<maxSpeed<<endl;
     }
   }
-  cout<<"holding "<<holding<<endl;
 }
 
 void Me::handleCollision(Thing * thing, int direction) {
   MovingThing::handleCollision(thing, direction);
   if (direction != 0 && thing->type & SPLATTER) {
+    if (dirtiness == 0) {
+      say("Ugh, I've got blood\nall over my dress!\nI can't get married\nin a bloody dress!");
+    }
     dirtiness++;
   }
 }
@@ -218,8 +225,6 @@ void Me::throwIt() {
     holding->setPos(getThrowPoint().x, getThrowPoint().y);
     if (flipped) throwPower *= -1;
     holding->accelerate(Vector2f(throwPower, 0));
-    cout<<"throwing at "<<throwPower<<endl;
-    cout<<"its speed is "<<holding->getVelocity().x<<endl;
     holding->held = false;
     renderList->append(holding);
     currentAction = NULL;
@@ -234,6 +239,14 @@ void Me::throwIt() {
 
 void Me::damage(Point2f pos, int points) {
   // no damage
+}
+
+void Me::give(MovingThing * thing) {
+  MovingThing::give(thing);
+  if (thing != NULL && thing->name == BLEACH) {
+    dirtiness = 0;
+    say("I love the feeling of bleach\n on my sensitive skin.");
+  }
 }
 
 void Me::move() {
@@ -279,8 +292,99 @@ void Me::move() {
   }
 }
 
+void Me::say(string text) {
+  talkTimer.reset();
+  talkTimer.start();
+  *myText->text = text;
+}
+
+void Me::insult(int type) {
+  int lol = rand()%10;
+  if (type & BRIDESMAID) {
+    switch (lol) {
+      case 0:
+        say("You're ugly!");
+        break;
+      case 1:
+        say("Your bangs look\nhorrible anyway!");
+        break;
+      case 2:
+        say("You're fat!");
+        break;
+      case 3:
+        say("We're not friends.");
+        break;
+      case 4:
+        say("I don't care.");
+        break;
+      case 5:
+        say("Leave me alone.");
+        break;
+      case 6:
+        say("Why won't you die?");
+        break;
+      case 7:
+        say("I love the way you die.");
+        break;
+      case 8:
+        say("Today's the wrong day!");
+        break;
+      case 9:
+        say("Shh.\nThat's it.\nJust step into the light.");
+        break;
+        
+      default:
+        say("Go away!");
+        break;
+    } 
+  } else if (type & HOBO) {
+      switch (lol) {
+        case 0:
+          say("Homeless people are gross.");
+          break;
+        case 1:
+          say("Get away,\nyou dirty hobo!");
+          break;
+        case 2:
+          say("Don't touch me!");
+          break;
+        case 3:
+          say("Get a job!");
+          break;
+        case 4:
+          say("While I understand the system of\noppression that people of your\nsocioeconomic status face,\nI'm not giving you my money.");
+          break;
+        case 5:
+          say("Go home.");
+          break;
+        case 6:
+          say("His family is\ngoing to miss him.");
+          break;
+        case 7:
+          say("I hope I didn't\nget any diseases.");
+          break;
+        case 8:
+          say("Wooo!");
+          break;
+        case 9:
+          say("I am enjoying \nthe cold-blooded murder\nof innocents.");
+          break;
+          
+        default:
+          say("Go away!");
+          break;
+      }
+  }
+}
+
 void Me::render(Point2f pos, Vector2f size) const {
   Color tint = Color(1.0f, 1.0f, 1.0f-(dirtiness/1000.0f), 1.0f-(dirtiness/1000.0f));
   Thing::render(String(texture), pos, size, 0, tint);
+  myText->x = x;
+  myText->y = y-height*2;
+  if (talkTimer.seconds() > 5) {
+    //talkTimer.stop();
+    *myText->text = "";
+  }
 }
 

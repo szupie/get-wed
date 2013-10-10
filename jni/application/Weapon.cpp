@@ -16,11 +16,8 @@ void Weapon::handleCollision(Thing * thing, int direction) {
   if (direction != 0) {
     MovingThing * theThing = (MovingThing*)thing;
     if (theThing->type & MOVINGTHING) {
-      cout<<this<<" hits "<<theThing<<endl;
       theThing->damage(getPos(), damagePoints*velocity.magnitude());
-      cout<<"my velo " <<velocity.x<<endl;
-      theThing->accelerate(Vector2f(-velocity.x, -1));
-      cout<<"its velo " <<theThing->getVelocity().x<<endl;
+      theThing->accelerate(Vector2f(0, -1));
       if (perishable) {
         this->damage(getPos(), damagePoints*velocity.magnitude());
       }
@@ -38,14 +35,13 @@ void Weapon::boom() {
   if (perishable) {
     deletable = true;
     setPos(-9999999, -9999999);
-    cout<<"You can delete "<<this<<" now"<<endl;
   }
 }
 
 
 Melee::Melee(Point2f pos, float width, float height, float depth, int damage) : Weapon(pos, width, height, depth, 0, damage) {
   name = MELEE;
-  //noRender = true;
+  noRender = true;
   texture = "green"; //<<DEBUGGING!
   perishable = true;
 }
@@ -130,6 +126,21 @@ void Money::handleCollision(Thing * thing, int direction) {
 }
 
 MovingThing * Money::take() {
+  deletable = true;
+  return this;
+}
+
+
+Bleach::Bleach(Point2f pos, float depth) : Weapon(pos, 40, 40, depth, 500, 0) {
+  name = BLEACH;
+  texture = "bleach";
+}
+
+void Bleach::handleCollision(Thing * thing, int direction) {
+  MovingThing::handleCollision(thing, direction);
+}
+
+MovingThing * Bleach::take() {
   deletable = true;
   return this;
 }

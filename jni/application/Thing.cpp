@@ -78,5 +78,5 @@ void Thing::render(const String &texture, Point2f pos, Vector2f size, float rota
 }
 
 void Thing::render(const String &texture, Point2f pos, Vector2f size) const {
-  render(texture, pos, size, 0, Color(/*1, depth, depth, depth*/));
+  render(texture, pos, size, 0, Color(1, depth, depth, depth));//0.2f+depth*0.6f, 0.4f+depth*0.6f, 0.4f+depth*0.6f));
 }

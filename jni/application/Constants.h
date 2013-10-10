@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 
 namespace Constants {
-  enum Direction { NONE, DOWN=1, LEFT=2, UP=4, RIGHT=8 };
+  enum Direction { NONE, DOWN=1, LEFT=2, UP=4, RIGHT=8, IN=16 };
   const float gravity = 0.3;
 }
 

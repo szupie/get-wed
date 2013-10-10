@@ -8,7 +8,7 @@ using namespace Zeni;
 
 enum ThingType { THING=1, STATIC=1<<1, MOVINGTHING=1<<2, PERSON=1<<3, ME=1<<4, WEAPON=1<<5, BRIDESMAID=1<<6, HOBO=1<<7, SPLATTER=1<<8 };
 
-enum weaponName { NOWEAPON, MELEE, BOWLING, SWORD, GUN, MONEY, BEER };
+enum weaponName { NOWEAPON, MELEE, BOWLING, SWORD, GUN, MONEY, BLEACH };
 
 class Thing {
   public:

@@ -19,4 +19,14 @@ class Static : public Thing {
     String texture;
 };
 
+class Ground : public Static {
+  public:
+    Ground(float x=0, float y=0, float width=0, float height=0, float depth=1);
+};
+
+class Wall : public Static {
+public:
+  Wall(float x=0, float y=0, float width=0, float height=0, float depth=1);
+};
+
 #endif // HEADER FILE

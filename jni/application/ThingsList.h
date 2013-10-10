@@ -27,6 +27,7 @@ public:
   void append(Thing* thing) {
     queue.push_back(thing);
     reorder();
+    last = thing;
   }
   
   Thing * remove(int n) {
@@ -45,12 +46,19 @@ public:
     return result;
   }
   
+  Thing * newest() {
+    return last;
+  }
+  
   bool empty() {
     return queue.empty();
   }
   
+  
+  
 private:
   vector<Thing *> queue;
+  Thing * last;
 };
 
 #endif // HEADER FILE
